@@ -1,4 +1,4 @@
-# java_springboot_engineer
+# springboot_engineer
 
 A senior Spring Boot engineer skill for building and maintaining production-grade Spring Boot 3.x applications.
 
@@ -17,14 +17,14 @@ Use this skill (or a skill that extends it) when the task involves **writing or 
 
 For **read-only analysis** (finding problems without changing code), use the reviewer skills instead:
 - `common_reviewer.md`
-- `springboot_2_to_3_reviewer_extends_common.md`
+- `sb3_reviewer.md`
 
 ---
 
 ## File Structure
 
 ```
-java_springboot_engineer/
+springboot_engineer/
 ├── SKILL.md            ← entry point — role definition, constraints, workflow
 └── references/         ← loaded on-demand based on what the task touches
     ├── web.md          ← Controllers, REST APIs, validation, exception handling
@@ -57,13 +57,13 @@ This skill is the base for task-specific engineer skills:
 
 | Task | Skill |
 |---|---|
-| Spring Boot 2 to 3 migration fixes | `../springboot_2_to_3_migration_engineer.md` |
+| Spring Boot 2 to 3 migration fixes | `../sb3_engineer.md` |
 
 ---
 
 ## Usage in Prompt
 
 ```
-Read and follow: ai/skills/java_springboot_engineer/SKILL.md
-Load relevant references from: ai/skills/java_springboot_engineer/references/
+Read and follow: ai/skills/springboot_engineer/SKILL.md
+Load relevant references from: ai/skills/springboot_engineer/references/
 ```

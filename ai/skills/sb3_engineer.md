@@ -3,14 +3,14 @@
 ## Mission
 
 Apply fixes to a Spring Boot 2.x codebase to make it compatible with Spring Boot 3.x.
-Work from the findings in a review report produced by `springboot_2_to_3_reviewer_extends_common.md`.
+Work from the findings in a review report produced by `sb3_reviewer.md`.
 Do not invent new findings — fix only what the report identified.
 
 ## Composition
 
 You MUST incorporate:
-- `ai/skills/java_springboot_engineer/SKILL.md` — base engineer role, constraints, output quality bar
-- Load relevant references from `ai/skills/java_springboot_engineer/references/` based on what you touch:
+- `ai/skills/springboot_engineer/SKILL.md` — base engineer role, constraints, output quality bar
+- Load relevant references from `ai/skills/springboot_engineer/references/` based on what you touch:
   - Fixing security config → load `references/security.md`
   - Fixing data/JPA → load `references/data.md`
   - Fixing controllers/web → load `references/web.md`

@@ -30,9 +30,9 @@ READ FIRST (in order):
 
 | # | File                                                     | Role                    |
 |---|----------------------------------------------------------|-------------------------|
-| 1 | ai/skills/springboot_2_to_3_reviewer_extends_common.md  | Entry point skill       |
+| 1 | ai/skills/sb3_reviewer.md  | Entry point skill       |
 | 2 | ai/skills/common_reviewer.md                             | Compose baseline skill  |
-| 3 | ai/skills/springboot_2_to_3_migration.md                 | Composed migration skill|
+| 3 | ai/skills/sb3_migration_reviewer.md                 | Composed migration skill|
 | 4 | ai/clinerules/ (all 6 files)                             | Behavioral constraints  |
 | 5 | ai/knowledge/spring-boot-3.0-migration-guide.md          | Migration reference [P0]|
 | 6 | ai/knowledge/baeldung-spring-boot-3-migration.md         | Migration reference [P1]|
@@ -43,7 +43,7 @@ READ FIRST (in order):
 
 ## STEP 1 — Review
 
-Follow `ai/skills/springboot_2_to_3_reviewer_extends_common.md` exactly.
+Follow `ai/skills/sb3_reviewer.md` exactly.
 Do NOT apply any fixes yet.
 
 Stop and wait for confirmation before proceeding to Step 2.
@@ -52,15 +52,15 @@ Stop and wait for confirmation before proceeding to Step 2.
 
 ## STEP 2 — Fix (only after Step 1 is confirmed)
 
-Follow `ai/skills/springboot_2_to_3_migration_engineer.md` exactly.
+Follow `ai/skills/sb3_engineer.md` exactly.
 
 Additional files to load for Step 2:
 
 | # | File                                                              | Role                         |
 |---|-------------------------------------------------------------------|------------------------------|
-| 1 | ai/skills/springboot_2_to_3_migration_engineer.md                | Entry point fix skill        |
-| 2 | ai/skills/java_springboot_engineer/SKILL.md                      | Base engineer role           |
-| 3 | ai/skills/java_springboot_engineer/references/ (load as needed)  | Web / Data / Security / Test |
+| 1 | ai/skills/sb3_engineer.md                | Entry point fix skill        |
+| 2 | ai/skills/springboot_engineer/SKILL.md                      | Base engineer role           |
+| 3 | ai/skills/springboot_engineer/references/ (load as needed)  | Web / Data / Security / Test |
 | 4 | ai/knowledge/spring-boot-3.0-migration-guide.md                  | Fix reference [P0]           |
 | 5 | ai/knowledge/baeldung-spring-boot-3-migration.md                 | Fix reference [P1]           |
 

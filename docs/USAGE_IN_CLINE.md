@@ -2,7 +2,7 @@
 
 ## Option A — Single skill
 Use:
-- `ai/skills/springboot_2_to_3_migration.md`
+- `ai/skills/sb3_migration_reviewer.md`
 
 Also include rules:
 - `ai/clinerules/01_output_contract.md`
@@ -13,7 +13,7 @@ Also include rules:
 
 ## Option B — Merged reviewer
 Use:
-- `ai/skills/springboot_2_to_3_reviewer_extends_common.md`
+- `ai/skills/sb3_reviewer.md`
 
 Also include all rules in `ai/clinerules/`.
 

@@ -45,10 +45,10 @@ cline-springboot-migration-demo/
 │   │
 │   ├── skills/              # Skill definitions — pick one as entry point
 │   │   ├── common_reviewer.md                             # REVIEWER: baseline code review
-│   │   ├── springboot_2_to_3_migration.md                 # REVIEWER: migration-specific checks
-│   │   ├── springboot_2_to_3_reviewer_extends_common.md  # REVIEWER: merges both (recommended)
-│   │   ├── springboot_2_to_3_migration_engineer.md       # ENGINEER: applies migration fixes
-│   │   └── java_springboot_engineer/                     # ENGINEER: base Spring Boot engineer
+│   │   ├── sb3_migration_reviewer.md                 # REVIEWER: migration-specific checks
+│   │   ├── sb3_reviewer.md  # REVIEWER: merges both (recommended)
+│   │   ├── sb3_engineer.md       # ENGINEER: applies migration fixes
+│   │   └── springboot_engineer/                     # ENGINEER: base Spring Boot engineer
 │   │       ├── SKILL.md                                  #   role, constraints, workflow
 │   │       ├── README.md                                 #   skill documentation
 │   │       └── references/                               #   loaded on-demand
@@ -79,11 +79,11 @@ Skills are split into two chains — **Reviewer** (Step 1, read-only) and **Engi
 ```
 REVIEWER chain                              ENGINEER chain
 ─────────────────────────────────           ──────────────────────────────────────────
-common_reviewer.md                          java_springboot_engineer/SKILL.md
+common_reviewer.md                          springboot_engineer/SKILL.md
         ↑                                               ↑
-springboot_2_to_3_migration.md              springboot_2_to_3_migration_engineer.md
+sb3_migration_reviewer.md              sb3_engineer.md
         ↑
-springboot_2_to_3_reviewer_extends_common.md
+sb3_reviewer.md
 ```
 
 ### Which skill to use
@@ -91,27 +91,27 @@ springboot_2_to_3_reviewer_extends_common.md
 | Step | Goal | Entry point skill |
 |---|---|---|
 | Review | General code quality (any project) | `common_reviewer.md` |
-| Review | SB2 to SB3 migration blockers only | `springboot_2_to_3_migration.md` |
-| Review | Both combined — recommended | `springboot_2_to_3_reviewer_extends_common.md` |
-| Fix | SB2 to SB3 migration fixes | `springboot_2_to_3_migration_engineer.md` |
-| Fix | General Spring Boot engineering | `java_springboot_engineer/SKILL.md` |
+| Review | SB2 to SB3 migration blockers only | `sb3_migration_reviewer.md` |
+| Review | Both combined — recommended | `sb3_reviewer.md` |
+| Fix | SB2 to SB3 migration fixes | `sb3_engineer.md` |
+| Fix | General Spring Boot engineering | `springboot_engineer/SKILL.md` |
 
 ### Reviewer skill composition
 
-`springboot_2_to_3_reviewer_extends_common.md` composes:
+`sb3_reviewer.md` composes:
 - `common_reviewer.md` — correctness, security, observability, build reliability
-- `springboot_2_to_3_migration.md` — Java 17, Jakarta, Security 6, HttpClient 5, Batch, config keys
+- `sb3_migration_reviewer.md` — Java 17, Jakarta, Security 6, HttpClient 5, Batch, config keys
 
 Findings from both are merged: duplicate issues collapsed, stronger severity wins.
 
 ### Engineer skill composition
 
-`springboot_2_to_3_migration_engineer.md` composes:
-- `java_springboot_engineer/SKILL.md` — base engineer role, constraints, output quality bar
-- Loads `java_springboot_engineer/references/` selectively (security.md, data.md, web.md, testing.md) based on what the fix touches
+`sb3_engineer.md` composes:
+- `springboot_engineer/SKILL.md` — base engineer role, constraints, output quality bar
+- Loads `springboot_engineer/references/` selectively (security.md, data.md, web.md, testing.md) based on what the fix touches
 - Migration knowledge base P0/P1 for fix patterns
 
-See `ai/skills/java_springboot_engineer/README.md` for the base engineer skill documentation.
+See `ai/skills/springboot_engineer/README.md` for the base engineer skill documentation.
 
 ---
 

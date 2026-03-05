@@ -43,8 +43,8 @@ cline-springboot-migration-demo/
 │   │
 │   ├── skills/              # Skill 定義 — 選一個作為入口
 │   │   ├── common_reviewer.md                             # 通用程式碼審查基準
-│   │   ├── springboot_2_to_3_migration.md                 # 遷移專項檢查
-│   │   └── springboot_2_to_3_reviewer_extends_common.md  # 推薦：合併以上兩者
+│   │   ├── sb3_migration_reviewer.md                 # 遷移專項檢查
+│   │   └── sb3_reviewer.md  # 推薦：合併以上兩者
 │   │
 │   └── templates/
 │       └── review_report_template.md            # 輸出格式（所有 skill 共用）
@@ -67,14 +67,14 @@ cline-springboot-migration-demo/
 | 目標 | Skill |
 |---|---|
 | 通用程式碼品質審查（任何專案） | `common_reviewer.md` |
-| 僅檢查 Spring Boot 2 to 3 遷移阻礙 | `springboot_2_to_3_migration.md` |
-| 合併兩者為單一報告（推薦） | `springboot_2_to_3_reviewer_extends_common.md` |
+| 僅檢查 Spring Boot 2 to 3 遷移阻礙 | `sb3_migration_reviewer.md` |
+| 合併兩者為單一報告（推薦） | `sb3_reviewer.md` |
 
 ### Skill 組合方式
 
-`springboot_2_to_3_reviewer_extends_common.md` 為入口點，組合了：
+`sb3_reviewer.md` 為入口點，組合了：
 - `common_reviewer.md` — 正確性、安全性、可觀測性、建構可靠性
-- `springboot_2_to_3_migration.md` — Java 17、Jakarta、Security 6、HttpClient 5、Batch、設定屬性
+- `sb3_migration_reviewer.md` — Java 17、Jakarta、Security 6、HttpClient 5、Batch、設定屬性
 
 兩個 skill 的問題會合併：重複問題合為一條，嚴重性取較高者。
 
