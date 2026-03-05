@@ -3,6 +3,3 @@ target/
 
 # Editor / tool state
 .claude/
-
-# Generated review reports (outputs, not source)
-review-report-*.md
