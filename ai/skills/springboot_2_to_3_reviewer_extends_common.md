@@ -27,7 +27,14 @@ Order findings:
 3) Config/deployment risks
 4) Suggestions
 
+## Output
+After completing the review, write the report to a Markdown file:
+- Filename format: `review-report-<repo-name>-<YYYYMMDD>.md`
+- Location: project root directory
+- Format: follow `ai/templates/review_report_template.md`
+
 ## Done Definition
 - Exactly one report
 - No repeated duplicated findings
 - Clear GO/GO-with-fixes/NO-GO decision
+- Report written to a Markdown file as specified above

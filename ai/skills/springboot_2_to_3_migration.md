@@ -7,10 +7,25 @@ Review a given repository for a Spring Boot 2 → 3 migration and produce:
 - Verification checklist
 
 ## Knowledge Base (must use)
-- Spring Boot 3.0 Migration Guide (official):
-  https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide
-- Baeldung migration guide:
-  https://www.baeldung.com/spring-boot-3-migration
+Read in priority order. P0 precedes P1 in all reasoning and conflict resolution.
+
+- **[P0] Spring Boot 3.0 Migration Guide (official — authoritative):**
+  ai/knowledge/spring-boot-3.0-migration-guide.md
+- **[P1] Baeldung migration guide (supplementary — practical examples):**
+  ai/knowledge/baeldung-spring-boot-3-migration.md
+
+## Known Conflicts Between Knowledge Sources
+When the two sources disagree, apply these rules:
+
+1. **Property name — prefer official**
+   - Official: `spring.jpa.hibernate.use-new-id-generator-mappings` (correct, includes `-mappings`)
+   - Baeldung: `spring.jpa.hibernate.use-new-id-generator` (incorrect, missing `-mappings`)
+   - Use the official name when checking or reporting this property.
+
+2. **Trailing slash matching — prefer official framing**
+   - Official: the default value changed to `false` (still configurable)
+   - Baeldung: describes the option as "deprecated" (imprecise)
+   - The configuration option is NOT deprecated; only the default changed.
 
 ## Required Output Contract
 Use **exactly** the format in `ai/templates/review_report_template.md`.
@@ -18,6 +33,8 @@ Use **exactly** the format in `ai/templates/review_report_template.md`.
 ## Migration Key Constraints (anchor)
 - Spring Boot 3 requires **Java 17+** and Spring Framework 6.
 - Ecosystem is **Jakarta**: `javax.*` → `jakarta.*` across APIs and dependencies.
+- Spring Security upgrade path: Boot 2.7 → Security 5.8 first → Security 6 → Boot 3.
+- Apache HttpClient upgraded: 4.x (`org.apache.http.*`) → 5.x (`org.apache.hc.*`).
 
 ## Procedure (ordered by ROI)
 ### 1) Baseline detection
@@ -34,21 +51,36 @@ Use **exactly** the format in `ai/templates/review_report_template.md`.
 ### 3) Dependency blockers (Critical first)
 - Scan dependencies and dependency tree:
   - Direct `javax.*` artifacts (Critical)
+  - `org.apache.httpcomponents:httpclient` (4.x) — must migrate to `org.apache.httpcomponents.client5:httpclient5` (Critical if RestTemplate is customized)
   - Swagger/Springfox legacy issues (Warn/Critical depending on compile break)
-  - Spring Security / Hibernate major upgrades (Warn/Critical depending on usage)
+  - Spring Security < 5.8 — must upgrade to 5.8 before Boot 3 (Critical)
+  - Hibernate — must use `org.hibernate.orm` group ID (Critical)
 - Flag transitive conflicts likely to break.
 
 ### 4) Code-level breaks (targeted grep)
 Search patterns:
 - `javax\.` (Critical)
+- `org\.apache\.http\.` (Critical — old HttpClient 4.x namespace, must migrate to `org.apache.hc.*`)
+- `HttpComponentsClientHttpRequestFactory` with `setConnectTimeout\|setReadTimeout` (Critical — removed in HttpClient 5.x)
 - `WebSecurityConfigurerAdapter` (Critical if present)
 - `antMatchers\(` / `mvcMatchers\(` (Warn/Critical depending on usage)
-- `@ConstructorBinding` / configuration binding pitfalls (Warn)
+- `@EnableBatchProcessing` (Warn — remove if relying on Boot autoconfiguration)
+- `@ConstructorBinding` at type level (Warn — move to constructor level)
 
 ### 5) Config/property changes
-- Scan `application*.yml/properties` for deprecated/removed keys (Warn or Critical if obvious).
+- Scan `application*.yml/properties` for deprecated/removed keys:
+  - `spring.redis.*` → `spring.data.redis.*` (Warn)
+  - `spring.data.cassandra.*` → `spring.cassandra.*` (Warn)
+  - `spring.jpa.hibernate.use-new-id-generator` → removed (Critical if present)
+  - `server.max.http.header.size` → `server.max-http-request-header-size` (Warn)
+  - `spring.security.saml2.relyingparty.registration.{id}.identity-provider` → removed (Critical if present)
+- Tip: add `spring-boot-properties-migrator` dependency to auto-detect at runtime.
 
-### 6) Packaging/runtime
+### 6) Spring Batch
+- If `@EnableBatchProcessing` is present and Boot autoconfiguration is desired: remove it (Warn).
+- If multiple `Job` beans exist: flag that only one job runs at startup; others need `spring.batch.job.name` or a scheduler (Warn).
+
+### 7) Packaging/runtime
 - WAR vs JAR:
   - WAR on external container requires Jakarta-compatible container (Warn/Critical).
 - Ensure actuator, security, tracing implications are called out if present.
@@ -61,6 +93,13 @@ Gradle:
 - `./gradlew test`
 - `./gradlew dependencies | rg "javax\.|jakarta\."`
 
+## Output
+After completing the review, write the report to a Markdown file:
+- Filename format: `review-report-<repo-name>-<YYYYMMDD>.md`
+- Location: project root directory
+- Format: follow `ai/templates/review_report_template.md`
+
 ## Done Definition
 - A single report with Critical/Warn/Suggestion
-- A “Fast Fix Plan” ordered: Java → deps → code → config → tests → runtime
+- Priority Plan ordered: Java → deps → code → config → batch → tests → runtime
+- Report written to a Markdown file as specified above
