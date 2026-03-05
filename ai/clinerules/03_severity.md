@@ -1,6 +1,6 @@
 # Rule: Severity Assignment
 
-Use `ai/templates/severity_rubric.md`.
+Use `ai/knowledge/severity_rubric.md`.
 
 - Critical: migration blockers / guaranteed break
 - Warn: likely break / behavior change risk requiring verification
