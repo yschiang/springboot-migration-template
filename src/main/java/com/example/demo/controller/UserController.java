@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.validation.Valid;   // migrated to jakarta
 
 import java.util.LinkedHashMap;
 import java.util.Map;
