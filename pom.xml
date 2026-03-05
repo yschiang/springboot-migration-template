@@ -45,6 +45,38 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- ==========================================
+             MIGRATION PITFALL: Legacy javax dependencies
+             These conflict with the jakarta.* runtime in SB3 / Tomcat 10.
+             ========================================== -->
+
+        <!-- Old Servlet API (javax) - Tomcat 10 ships jakarta.servlet; this clashes at runtime -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Old Bean Validation API (javax) - conflicts with jakarta.validation brought by SB3 -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+
+        <!-- Springfox Swagger 2 - hardwired to javax, incompatible with Spring Boot 3 / Spring MVC 6 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
+        </dependency>
     </dependencies>
 
     <build>
