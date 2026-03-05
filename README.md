@@ -30,12 +30,12 @@ The prompt runs in two gated steps:
 cline-springboot-migration-demo/
 ├── ai/
 │   ├── clinerules/          # Behavioral rules — always applied
-│   │   ├── 01_output_contract.md
 │   │   ├── 02_evidence_first.md
 │   │   ├── 03_severity.md
 │   │   ├── 04_no_fluff.md
-│   │   ├── 05_verification_commands.md
-│   │   └── 06_spring_migration_focus.md
+│   │   ├── 06_spring_migration_focus.md
+│   │   ├── coding-style.md
+│   │   └── security.md
 │   │
 │   ├── knowledge/           # Reference material the AI reads during review
 │   │   ├── spring-boot-3.0-migration-guide.md   [P0 — authoritative]
@@ -49,7 +49,6 @@ cline-springboot-migration-demo/
 │   │   │
 │   │   ├── springboot_engineer/     # Generic Spring Boot engineer
 │   │   │   ├── SKILL.md             #   entry point — role, constraints, workflow
-│   │   │   ├── README.md            #   skill documentation
 │   │   │   └── references/          #   loaded on-demand
 │   │   │       ├── web.md
 │   │   │       ├── data.md
@@ -113,7 +112,7 @@ For SB2→3 migration, `springboot_migration/reviewer.md` composes the generic r
 - Works from findings produced by `springboot_migration/reviewer.md`
 - Migration knowledge base P0/P1 for fix patterns
 
-See `ai/skills/springboot_engineer/README.md` for the base engineer skill documentation.
+See `ai/skills/springboot_engineer/SKILL.md` for the base engineer skill documentation.
 
 ---
 
@@ -139,12 +138,12 @@ All rules in `ai/clinerules/` are always applied:
 
 | File | Enforces |
 |---|---|
-| `01_output_contract` | One report per run, exact template format, no invented versions |
 | `02_evidence_first` | Every finding must cite file path + code snippet |
 | `03_severity` | Critical = guaranteed break · Warn = likely break · Suggestion = quality |
 | `04_no_fluff` | Actionable, repo-specific recommendations only — no generic advice |
-| `05_verification_commands` | Report must end with build, test, and dependency-inspection commands |
 | `06_spring_migration_focus` | Always check all 6 Spring-specific areas; mark N/A with rationale if not applicable |
+| `coding-style` | Coding style conventions and formatting rules |
+| `security` | Security-related behavioral constraints |
 
 ---
 

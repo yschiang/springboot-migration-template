@@ -15,11 +15,15 @@ This file is auto-loaded by Cline on every session.
 Parse the selected task card's `SkillRefs:` line as a **comma-separated list of file paths**.
 SkillRefs are **REQUIRED, not optional**. Read every file listed before executing.
 
-## Step 2 — Load the contract
+## Step 2 — Load behavioral rules
+
+Read every file in `ai/clinerules/`. These are always-on constraints (evidence, severity, security, etc.).
+
+## Step 3 — Load the contract
 
 Read `ai/BOOTSTRAP.md`. This is the ONLY canonical output contract.
 
-## Step 3 — Execute
+## Step 4 — Execute
 
 1. Read every file listed in the task card's **Scope**.
 2. Run **Checks** in order. Cite `file:line` + snippet for every finding.

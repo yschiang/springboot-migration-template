@@ -28,12 +28,12 @@ Prompt 分兩個受控步驟執行：
 cline-springboot-migration-demo/
 ├── ai/
 │   ├── clinerules/          # 行為規則 — 每次執行皆套用
-│   │   ├── 01_output_contract.md
 │   │   ├── 02_evidence_first.md
 │   │   ├── 03_severity.md
 │   │   ├── 04_no_fluff.md
-│   │   ├── 05_verification_commands.md
-│   │   └── 06_spring_migration_focus.md
+│   │   ├── 06_spring_migration_focus.md
+│   │   ├── coding-style.md
+│   │   └── security.md
 │   │
 │   ├── knowledge/           # AI 審查時參閱的知識庫
 │   │   ├── spring-boot-3.0-migration-guide.md   [P0 — 權威來源]
@@ -47,7 +47,6 @@ cline-springboot-migration-demo/
 │   │   │
 │   │   ├── springboot_engineer/          # 通用 Spring Boot 工程師
 │   │   │   ├── SKILL.md                  #   入口點 — 角色、限制、工作流程
-│   │   │   ├── README.md                 #   skill 說明文件
 │   │   │   └── references/              #   按需載入
 │   │   │       ├── web.md
 │   │   │       ├── data.md
@@ -85,7 +84,7 @@ cline-springboot-migration-demo/
 | 套用 SB2→3 遷移修復 | `springboot_migration/SKILL.md` |
 | 通用 Spring Boot 開發 | `springboot_engineer/SKILL.md` |
 
-完整 skill 架構說明請參閱 `ai/skills/INDEX.md`。
+完整 skill 架構說明請參閱 `ai/README.md`。
 
 ### Skill 組合方式
 
@@ -119,12 +118,12 @@ cline-springboot-migration-demo/
 
 | 檔案 | 強制內容 |
 |---|---|
-| `01_output_contract` | 每次執行只產出一份報告、使用指定模板格式、不捏造版本資訊 |
 | `02_evidence_first` | 每個問題必須引用檔案路徑與程式碼片段 |
 | `03_severity` | Critical = 確定中斷 · Warn = 可能中斷 · Suggestion = 品質改善 |
 | `04_no_fluff` | 建議必須具體可執行且針對該 repo — 不接受泛泛而談 |
-| `05_verification_commands` | 報告結尾必須包含建構、測試與相依性檢查指令 |
 | `06_spring_migration_focus` | 必須檢查全部 6 個 Spring 專項；若不適用需標記 N/A 並說明原因 |
+| `coding-style` | 程式碼風格慣例與格式化規則 |
+| `security` | 安全性相關行為約束 |
 
 ---
 
