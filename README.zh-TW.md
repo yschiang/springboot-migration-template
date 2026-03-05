@@ -27,6 +27,18 @@ Prompt 分兩個受控步驟執行：
 ```
 cline-springboot-migration-demo/
 ├── ai/
+│   ├── BOOTSTRAP.md          # 唯一正式輸出合約（SSOT）
+│   ├── TASKBOARD.md          # 路由：scope → task card
+│   ├── SSOT.md               # 各層職責速查
+│   ├── README.md             # 維護者指南 + pipeline 架構圖
+│   │
+│   ├── tasks/                # Task cards — 每次執行一張（做什麼）
+│   │   ├── _TEMPLATE.md
+│   │   ├── spring_boot_2_to_3_review.md
+│   │   ├── spring_boot_2_to_3_fix.md
+│   │   ├── common_reviewer.md
+│   │   └── deployment_yaml_ci_review.md
+│   │
 │   ├── clinerules/          # 行為規則 — 每次執行皆套用
 │   │   ├── 02_evidence_first.md
 │   │   ├── 03_severity.md
@@ -41,7 +53,7 @@ cline-springboot-migration-demo/
 │   │   ├── severity_rubric.md                   [嚴重性定義]
 │   │   └── examples.md                          [好壞程式範例，選用]
 │   │
-│   ├── skills/
+│   ├── skills/              # Skills — 怎麼做
 │   │   ├── springboot_reviewer/          # 通用程式碼審查基準
 │   │   │   └── SKILL.md                  #   入口點 — 正確性、安全性、可靠性
 │   │   │
@@ -60,7 +72,7 @@ cline-springboot-migration-demo/
 │   │       └── checks.md                 #   遷移專項 7 步驟檢查清單
 │   │
 │   └── templates/
-│       └── review_report_template.md            # 輸出格式（所有 skill 共用）
+│       └── review_report_template.md            # 選用匯出格式（對映 BOOTSTRAP.md）
 │
 ├── docs/
 │   ├── USAGE_IN_CLINE.md    # Cline 設定說明
@@ -155,9 +167,9 @@ cline-springboot-migration-demo/
 ## Overview          <- repo 基本資訊表 + GO / GO-with-fixes / NO-GO
 ## Summary           <- 計數表：Critical | Warning | Suggestion
 ## Findings
-   ### Critical      <- [CRITICAL] ID — 標題
-   ### Warning       <- [WARN] ID — 標題        每條問題包含：
-   ### Suggestion    <- [SUGGESTION] ID — 標題    位置 · 證據 · 原因 · 修復方式 · 行動項目
+   ### Critical      <- [CRITICAL][SOURCE] ID — 標題
+   ### Warning       <- [WARN][SOURCE] ID — 標題        每條問題包含：
+   ### Suggestion    <- [SUGGESTION][SOURCE] ID — 標題    位置 · 證據 · 原因 · 修復方式 · 行動項目
 ## Strengths         <- 做得好的地方
 ## Priority Plan     <- P0 / P1 / P2 表格（含檔案與預估工時）
 ## Verification Checklist  <- 建構 · 測試 · 驗煙指令

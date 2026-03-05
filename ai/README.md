@@ -54,7 +54,8 @@ Just open the repo in Cline. It auto-loads `.clinerules/project.md`, which:
 
 | Task | File | Default Role |
 |---|---|---|
-| Spring Boot 2->3 review or fix | `tasks/spring_boot_2_to_3_code_review.md` | `reviewer` |
+| Spring Boot 2->3 review | `tasks/spring_boot_2_to_3_review.md` | `reviewer` |
+| Spring Boot 2->3 fix | `tasks/spring_boot_2_to_3_fix.md` | `submitter` |
 | Deployment YAML / CI review | `tasks/deployment_yaml_ci_review.md` | `ops` |
 | Generic code review | `tasks/common_reviewer.md` | `reviewer` |
 
@@ -85,7 +86,8 @@ ai/
 ├── README.md                 <- this file
 ├── tasks/                    <- task cards (one per run)
 │   ├── _TEMPLATE.md
-│   ├── spring_boot_2_to_3_code_review.md
+│   ├── spring_boot_2_to_3_review.md
+│   ├── spring_boot_2_to_3_fix.md
 │   ├── common_reviewer.md
 │   └── deployment_yaml_ci_review.md
 ├── skills/                   <- detailed checklists and procedures

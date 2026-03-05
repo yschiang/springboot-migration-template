@@ -1,11 +1,11 @@
-# Task: Spring Boot 2 → 3 Code Review / Fix
+# Task: Spring Boot 2 → 3 Code Review
 
 | Field | Value |
 |---|---|
-| **Role** | `reviewer` (default) · `submitter` to apply fixes |
-| **Goal** | Identify — or fix — all blockers preventing a Spring Boot 2.x app from running on Spring Boot 3.x |
+| **Role** | `reviewer` |
+| **Goal** | Identify all blockers preventing a Spring Boot 2.x app from running on Spring Boot 3.x |
 | **Scope** | `src/`, `pom.xml`, `build.gradle`, `application*.yml`, `application*.properties` |
-| **Constraints** | Reviewer: read-only. Submitter: fix only what Checks flag, one commit per area. |
+| **Constraints** | Read-only. Do not modify source files. |
 
 ---
 
@@ -47,11 +47,14 @@
 
 ## SkillRefs
 
-SkillRefs: ai/skills/springboot_migration/reviewer.md, ai/skills/springboot_migration/SKILL.md, ai/knowledge/spring-boot-3.0-migration-guide.md
+SkillRefs: ai/skills/springboot_migration/reviewer.md
 
 ---
 
 ## DoD
 
-- Reviewer: one report following `ai/BOOTSTRAP.md` Standard Output Contract with clear GO/GO-with-fixes/NO-GO verdict
-- Submitter: all Critical findings fixed, each area committed separately, build passes (`mvn -q -DskipTests=false test`)
+- Write **two** report files using `ai/templates/review_report_template.md` as format:
+  - `review-report-<repo>-<YYYYMMDD>.md` — English
+  - `review-report-<repo>-<YYYYMMDD>-zh.md` — Traditional Chinese (繁體中文)
+- Both reports follow `ai/BOOTSTRAP.md` Standard Output Contract
+- Clear GO/GO-with-fixes/NO-GO verdict

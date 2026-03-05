@@ -29,6 +29,18 @@ The prompt runs in two gated steps:
 ```
 cline-springboot-migration-demo/
 ├── ai/
+│   ├── BOOTSTRAP.md          # THE one canonical output contract (SSOT)
+│   ├── TASKBOARD.md          # Routing: scope → task card
+│   ├── SSOT.md               # What belongs where (quick ref)
+│   ├── README.md             # Maintainer guide + pipeline diagram
+│   │
+│   ├── tasks/                # Task cards — one per run (WHAT to do)
+│   │   ├── _TEMPLATE.md
+│   │   ├── spring_boot_2_to_3_review.md
+│   │   ├── spring_boot_2_to_3_fix.md
+│   │   ├── common_reviewer.md
+│   │   └── deployment_yaml_ci_review.md
+│   │
 │   ├── clinerules/          # Behavioral rules — always applied
 │   │   ├── 02_evidence_first.md
 │   │   ├── 03_severity.md
@@ -43,7 +55,7 @@ cline-springboot-migration-demo/
 │   │   ├── severity_rubric.md                   [severity definitions]
 │   │   └── examples.md                          [good vs bad code patterns, optional]
 │   │
-│   ├── skills/
+│   ├── skills/              # Skills — HOW to do it
 │   │   ├── springboot_reviewer/     # Generic baseline code review
 │   │   │   └── SKILL.md             #   entry point — correctness, security, reliability
 │   │   │
@@ -62,7 +74,7 @@ cline-springboot-migration-demo/
 │   │       └── checks.md            #   migration-specific 7-step checklist
 │   │
 │   └── templates/
-│       └── review_report_template.md            # output format (all skills use this)
+│       └── review_report_template.md            # optional export format (mirrors BOOTSTRAP.md)
 │
 ├── docs/
 │   ├── USAGE_IN_CLINE.md    # Cline-specific setup options
@@ -175,9 +187,9 @@ Every review produces one Markdown file following `ai/templates/review_report_te
 ## Overview          <- repo meta table + GO / GO-with-fixes / NO-GO
 ## Summary           <- counts table: Critical | Warning | Suggestion
 ## Findings
-   ### Critical      <- [CRITICAL] ID — Title
-   ### Warning       <- [WARN] ID — Title        each with:
-   ### Suggestion    <- [SUGGESTION] ID — Title    Where · Evidence · Why · Fix · Action items
+   ### Critical      <- [CRITICAL][SOURCE] ID — Title
+   ### Warning       <- [WARN][SOURCE] ID — Title        each with:
+   ### Suggestion    <- [SUGGESTION][SOURCE] ID — Title    Where · Evidence · Why · Fix · Action items
 ## Strengths         <- what is done well
 ## Priority Plan     <- P0 / P1 / P2 tables with file + estimated effort
 ## Verification Checklist  <- build · test · smoke commands
