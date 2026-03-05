@@ -28,20 +28,20 @@ INPUTS:
 
 READ FIRST (in order):
 
-| # | File                                            | Role                     |
-|---|-------------------------------------------------|--------------------------|
-| 1 | ai/skills/sb3_reviewer.md                       | Step 1 entry point       |
-| 2 | ai/clinerules/ (all 6 files)                    | Behavioral constraints   |
-| 3 | ai/knowledge/spring-boot-3.0-migration-guide.md | Migration reference [P0] |
-| 4 | ai/knowledge/baeldung-spring-boot-3-migration.md| Migration reference [P1] |
-| 5 | ai/knowledge/severity_rubric.md                 | Severity definitions     |
-| 6 | ai/templates/review_report_template.md          | Report output format     |
+| # | File                                                      | Role                     |
+|---|-----------------------------------------------------------|--------------------------|
+| 1 | ai/skills/springboot_reviewer/sb3_reviewer.md             | Step 1 entry point       |
+| 2 | ai/clinerules/ (all 6 files)                              | Behavioral constraints   |
+| 3 | ai/knowledge/spring-boot-3.0-migration-guide.md           | Migration reference [P0] |
+| 4 | ai/knowledge/baeldung-spring-boot-3-migration.md          | Migration reference [P1] |
+| 5 | ai/knowledge/severity_rubric.md                           | Severity definitions     |
+| 6 | ai/templates/review_report_template.md                    | Report output format     |
 
 ---
 
 ## STEP 1 — Review
 
-Follow `ai/skills/sb3_reviewer.md` exactly.
+Follow `ai/skills/springboot_reviewer/sb3_reviewer.md` exactly.
 Do NOT apply any fixes yet.
 
 Stop and wait for confirmation before proceeding to Step 2.
@@ -50,7 +50,7 @@ Stop and wait for confirmation before proceeding to Step 2.
 
 ## STEP 2 — Fix (only after Step 1 is confirmed)
 
-Follow `ai/skills/sb3_engineer.md` exactly.
+Follow `ai/skills/springboot_engineer/sb3_engineer.md` exactly.
 
 Output:
 - Branch: fix/sb3-migration  ← change this if desired
@@ -70,9 +70,10 @@ DELIVERABLES:
 - Step 2: docs/evidence/reviewer_build_pass.md + branch fix/sb3-migration
 ```
 
-> Step 1 defers to `sb3_reviewer.md` which internally composes `common_reviewer.md` and
-> `sb3_migration_reviewer.md`. Step 2 defers to `sb3_engineer.md` which internally composes
-> `springboot_engineer/SKILL.md`. The prompt only adds what the skills don't know: target
+> Step 1 defers to `springboot_reviewer/sb3_reviewer.md`, which internally composes `common_reviewer.md` and
+> `sb3_migration_reviewer.md`. Step 2 defers to `springboot_engineer/sb3_engineer.md`, which internally composes
+> `springboot_engineer/SKILL.md` and loads relevant references from
+> `springboot_engineer/references/`. The prompt only adds what the skills don't know: target
 > branch, build tool, and the two-step gate.
 
 ---
@@ -82,7 +83,7 @@ DELIVERABLES:
 | Section | Purpose |
 |---|---|
 | **ROLE** | Declares dual mode — reviewer for Step 1, engineer for Step 2. |
-| **READ FIRST table** | Forces the agent to load the entry skill, behavioral rules, and knowledge base before touching any source code. Composed skills (e.g. `common_reviewer.md`) are loaded automatically by the entry skill — no need to list them here. |
+| **READ FIRST table** | Forces the agent to load the entry skill, composed skills, behavioral rules, and knowledge base before touching any source code. Order matters — entry skill first, constraints before knowledge. |
 | **STEP 1 gate** | The agent must stop and surface the report before any file is changed. Prevents silent auto-fix without human review. |
 | **STEP 2 fix order** | `Java → deps → code → config → batch → tests → runtime` — one commit per area so each fix is independently reviewable. |
 | **Verification commands** | Hard pass/fail criteria. The agent cannot mark the task done until both commands succeed. |

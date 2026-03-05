@@ -3,7 +3,7 @@
 ## Mission
 
 Apply fixes to a Spring Boot 2.x codebase to make it compatible with Spring Boot 3.x.
-Work from the findings in a review report produced by `sb3_reviewer.md`.
+Work from the findings in a review report produced by `ai/skills/springboot_reviewer/sb3_reviewer.md`.
 Do not invent new findings — fix only what the report identified.
 
 ## Composition

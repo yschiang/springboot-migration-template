@@ -43,15 +43,17 @@ cline-springboot-migration-demo/
 │   │   ├── severity_rubric.md                   [severity definitions]
 │   │   └── examples.md                          [good vs bad code patterns, optional]
 │   │
-│   ├── skills/              # Skill definitions — pick one as entry point
-│   │   ├── common_reviewer.md                             # REVIEWER: baseline code review
-│   │   ├── sb3_migration_reviewer.md                 # REVIEWER: migration-specific checks
-│   │   ├── sb3_reviewer.md  # REVIEWER: merges both (recommended)
-│   │   ├── sb3_engineer.md       # ENGINEER: applies migration fixes
-│   │   └── springboot_engineer/                     # ENGINEER: base Spring Boot engineer
-│   │       ├── SKILL.md                                  #   role, constraints, workflow
-│   │       ├── README.md                                 #   skill documentation
-│   │       └── references/                               #   loaded on-demand
+│   ├── skills/
+│   │   ├── springboot_reviewer/     # REVIEWER chain (Step 1, read-only)
+│   │   │   ├── sb3_reviewer.md      #   entry point — merges both reviewers
+│   │   │   ├── common_reviewer.md   #   baseline code review
+│   │   │   └── sb3_migration_reviewer.md  #   migration-specific checks
+│   │   │
+│   │   └── springboot_engineer/     # ENGINEER chain (Step 2, applies fixes)
+│   │       ├── sb3_engineer.md      #   entry point — SB2→3 migration fixes
+│   │       ├── SKILL.md             #   base engineer role, constraints, workflow
+│   │       ├── README.md            #   skill documentation
+│   │       └── references/          #   loaded on-demand
 │   │           ├── web.md
 │   │           ├── data.md
 │   │           ├── security.md
@@ -77,28 +79,28 @@ cline-springboot-migration-demo/
 Skills are split into two chains — **Reviewer** (Step 1, read-only) and **Engineer** (Step 2, applies fixes):
 
 ```
-REVIEWER chain                              ENGINEER chain
-─────────────────────────────────           ──────────────────────────────────────────
-common_reviewer.md                          springboot_engineer/SKILL.md
-        ↑                                               ↑
-sb3_migration_reviewer.md              sb3_engineer.md
+REVIEWER chain                                   ENGINEER chain
+─────────────────────────────────────            ──────────────────────────────────────────
+springboot_reviewer/common_reviewer.md           springboot_engineer/SKILL.md
+        ↑                                                    ↑
+springboot_reviewer/sb3_migration_reviewer.md    springboot_engineer/sb3_engineer.md
         ↑
-sb3_reviewer.md
+springboot_reviewer/sb3_reviewer.md
 ```
 
 ### Which skill to use
 
 | Step | Goal | Entry point skill |
 |---|---|---|
-| Review | General code quality (any project) | `common_reviewer.md` |
-| Review | SB2 to SB3 migration blockers only | `sb3_migration_reviewer.md` |
-| Review | Both combined — recommended | `sb3_reviewer.md` |
-| Fix | SB2 to SB3 migration fixes | `sb3_engineer.md` |
+| Review | General code quality (any project) | `springboot_reviewer/common_reviewer.md` |
+| Review | SB2 to SB3 migration blockers only | `springboot_reviewer/sb3_migration_reviewer.md` |
+| Review | Both combined — recommended | `springboot_reviewer/sb3_reviewer.md` |
+| Fix | SB2 to SB3 migration fixes | `springboot_engineer/sb3_engineer.md` |
 | Fix | General Spring Boot engineering | `springboot_engineer/SKILL.md` |
 
 ### Reviewer skill composition
 
-`sb3_reviewer.md` composes:
+`springboot_reviewer/sb3_reviewer.md` composes:
 - `common_reviewer.md` — correctness, security, observability, build reliability
 - `sb3_migration_reviewer.md` — Java 17, Jakarta, Security 6, HttpClient 5, Batch, config keys
 
@@ -106,7 +108,7 @@ Findings from both are merged: duplicate issues collapsed, stronger severity win
 
 ### Engineer skill composition
 
-`sb3_engineer.md` composes:
+`springboot_engineer/sb3_engineer.md` composes:
 - `springboot_engineer/SKILL.md` — base engineer role, constraints, output quality bar
 - Loads `springboot_engineer/references/` selectively (security.md, data.md, web.md, testing.md) based on what the fix touches
 - Migration knowledge base P0/P1 for fix patterns

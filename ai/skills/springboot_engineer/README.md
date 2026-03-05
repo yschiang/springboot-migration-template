@@ -16,8 +16,8 @@ Use this skill (or a skill that extends it) when the task involves **writing or 
 - Fixing or refactoring existing Spring Boot code
 
 For **read-only analysis** (finding problems without changing code), use the reviewer skills instead:
-- `common_reviewer.md`
-- `sb3_reviewer.md`
+- `ai/skills/springboot_reviewer/common_reviewer.md`
+- `ai/skills/springboot_reviewer/sb3_reviewer.md`
 
 ---
 
@@ -57,7 +57,7 @@ This skill is the base for task-specific engineer skills:
 
 | Task | Skill |
 |---|---|
-| Spring Boot 2 to 3 migration fixes | `../sb3_engineer.md` |
+| Spring Boot 2 to 3 migration fixes | `ai/skills/springboot_engineer/sb3_engineer.md` |
 
 ---
 

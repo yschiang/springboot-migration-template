@@ -41,10 +41,22 @@ cline-springboot-migration-demo/
 │   │   ├── severity_rubric.md                   [嚴重性定義]
 │   │   └── examples.md                          [好壞程式範例，選用]
 │   │
-│   ├── skills/              # Skill 定義 — 選一個作為入口
-│   │   ├── common_reviewer.md                             # 通用程式碼審查基準
-│   │   ├── sb3_migration_reviewer.md                 # 遷移專項檢查
-│   │   └── sb3_reviewer.md  # 推薦：合併以上兩者
+│   ├── skills/
+│   │   ├── springboot_reviewer/          # REVIEWER chain（步驟一，唯讀）
+│   │   │   ├── sb3_reviewer.md           #   入口點 — 合併兩個 reviewer
+│   │   │   ├── common_reviewer.md        #   通用程式碼審查基準
+│   │   │   └── sb3_migration_reviewer.md #   遷移專項檢查
+│   │   │
+│   │   └── springboot_engineer/          # ENGINEER chain（步驟二，修復）
+│   │       ├── sb3_engineer.md           #   入口點 — SB2→3 遷移修復
+│   │       ├── SKILL.md                  #   基礎工程師角色、限制、工作流程
+│   │       ├── README.md                 #   skill 說明文件
+│   │       └── references/              #   按需載入
+│   │           ├── web.md
+│   │           ├── data.md
+│   │           ├── security.md
+│   │           ├── cloud.md
+│   │           └── testing.md
 │   │
 │   └── templates/
 │       └── review_report_template.md            # 輸出格式（所有 skill 共用）
@@ -66,13 +78,13 @@ cline-springboot-migration-demo/
 
 | 目標 | Skill |
 |---|---|
-| 通用程式碼品質審查（任何專案） | `common_reviewer.md` |
-| 僅檢查 Spring Boot 2 to 3 遷移阻礙 | `sb3_migration_reviewer.md` |
-| 合併兩者為單一報告（推薦） | `sb3_reviewer.md` |
+| 通用程式碼品質審查（任何專案） | `springboot_reviewer/common_reviewer.md` |
+| 僅檢查 Spring Boot 2 to 3 遷移阻礙 | `springboot_reviewer/sb3_migration_reviewer.md` |
+| 合併兩者為單一報告（推薦） | `springboot_reviewer/sb3_reviewer.md` |
 
 ### Skill 組合方式
 
-`sb3_reviewer.md` 為入口點，組合了：
+`springboot_reviewer/sb3_reviewer.md` 為入口點，組合了：
 - `common_reviewer.md` — 正確性、安全性、可觀測性、建構可靠性
 - `sb3_migration_reviewer.md` — Java 17、Jakarta、Security 6、HttpClient 5、Batch、設定屬性
 

@@ -8,8 +8,8 @@ Produce **one merged review report** that:
 
 ## Composition
 You MUST incorporate:
-- `ai/skills/common_reviewer.md`
-- `ai/skills/sb3_migration_reviewer.md`
+- `ai/skills/springboot_reviewer/common_reviewer.md`
+- `ai/skills/springboot_reviewer/sb3_migration_reviewer.md`
 
 ## Required Output Contract
 Use **exactly** the format in `ai/templates/review_report_template.md`.
