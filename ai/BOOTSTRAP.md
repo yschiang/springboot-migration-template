@@ -3,6 +3,9 @@
 Paste this file + one task card from `ai/tasks/` to run any task.
 The task card defines WHAT. This file defines HOW.
 
+For Cline: routing is automatic via `.clinerules/project.md` → `ai/TASKBOARD.md`.
+For other agents: pick a task card manually from `ai/tasks/`.
+
 ---
 
 ## Working Rules
@@ -94,7 +97,7 @@ Introduce the next layer **only when you hit these triggers**:
 
 | Trigger | Addition |
 |---|---|
-| 5+ task cards, hard to find the right one | Add a `ROUTER.md` — a decision table mapping problem type → task card |
+| 5+ task cards, hard to find the right one | Done — see `ai/TASKBOARD.md` |
 | Reviewer spawns a fixer agent automatically | Add a `roles/` directory with agent-specific constraints |
 | State must persist across multiple agent runs | Add a `session/` scratch directory for handoff notes |
 | Org-wide consistency needed across many repos | Promote `BOOTSTRAP.md` to a shared package (npm, pip, or git submodule) |

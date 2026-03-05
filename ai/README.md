@@ -1,67 +1,81 @@
 # AI — How to Use in 30 Seconds
 
-Two files. Paste to agent. Done.
+## Cline (auto-routing)
+
+Just open the repo in Cline. It auto-loads `.clinerules/project.md`, which:
+1. Reads `ai/TASKBOARD.md` and infers scope from your repo structure
+2. Picks the right task card automatically
+3. Loads `ai/BOOTSTRAP.md` for output format
+4. Executes — no setup required
+
+## Claude Code / other agents (manual)
 
 ```
 1. Copy ai/BOOTSTRAP.md
 2. Copy one task card from ai/tasks/
-3. Paste both to your agent (Claude Code, Cline, etc.)
+3. Paste both to your agent
 ```
-
-The task card tells the agent **what** to do. `BOOTSTRAP.md` tells it **how** to behave and **what format** to output. No other setup required.
 
 ---
 
 ## Task Cards
 
-| Task | File | Use when |
+| Task | File | Default Role |
 |---|---|---|
-| Spring Boot 2→3 review or fix | `tasks/spring_boot_2_to_3_code_review.md` | Migrating a Java app to SB3 |
-| Deployment YAML / CI review | `tasks/deployment_yaml_ci_review.md` | Reviewing k8s/Helm/Kustomize configs |
-| Generic code review | `tasks/common_reviewer.md` | Any codebase, any language |
+| Spring Boot 2→3 review or fix | `tasks/spring_boot_2_to_3_code_review.md` | `reviewer` |
+| Deployment YAML / CI review | `tasks/deployment_yaml_ci_review.md` | `ops` |
+| Generic code review | `tasks/common_reviewer.md` | `reviewer` |
+
+Role enums: `reviewer` (read-only) · `submitter` (apply fixes) · `ops` (infra review)
 
 ---
 
-## Example 1 — Spring Boot 2→3 Reviewer
-
-Copy and paste this to your agent:
+## Example 1 — Review src/ for Spring Boot migration
 
 ```
-[paste full content of ai/BOOTSTRAP.md here]
+[paste ai/BOOTSTRAP.md]
 
 ---
 
-[paste full content of ai/tasks/spring_boot_2_to_3_code_review.md here]
+[paste ai/tasks/spring_boot_2_to_3_code_review.md]
 
 ---
 
-Target repo: <path or branch>
+Target: src/
 Build tool: Maven
 ```
 
-The agent will produce a structured report with CRITICAL/WARN/SUGGESTION findings, then stop.
-Confirm before asking it to apply fixes (set `Role: submitter` in a follow-up).
+Output: structured report with CRITICAL/WARN/SUGGESTION. Set `Role: submitter` in follow-up to apply fixes.
 
 ---
 
-## Example 2 — Deployment YAML / CI Reviewer
-
-Copy and paste this to your agent:
+## Example 2 — Ops review for charts/
 
 ```
-[paste full content of ai/BOOTSTRAP.md here]
+[paste ai/BOOTSTRAP.md]
 
 ---
 
-[paste full content of ai/tasks/deployment_yaml_ci_review.md here]
+[paste ai/tasks/deployment_yaml_ci_review.md]
 
 ---
 
-Target: <path to k8s/ or charts/ directory>
+Target: charts/
 Environment: production
 ```
 
-The agent will check Ingress pathType, probes, secrets hygiene, resource limits, and run `helm lint` / `kustomize build` validation.
+Output: Ingress pathType, probes, secrets hygiene, resource limits, helm lint results.
+
+---
+
+## Adding a New Task Card
+
+1. Copy `tasks/_TEMPLATE.md`
+2. Fill in: Role, Goal, Scope, Checks (≤ 5), Evidence
+3. Add a routing rule to `ai/TASKBOARD.md`
+4. Add it to the table above
+
+Keep each task card under 80 lines.
 
 ---
 
@@ -69,38 +83,20 @@ The agent will check Ingress pathType, probes, secrets hygiene, resource limits,
 
 ```
 ai/
-├── BOOTSTRAP.md              ← universal working contract (always include)
+├── BOOTSTRAP.md              ← working contract + output format (always loaded)
+├── TASKBOARD.md              ← routing rules: scope → task card
 ├── README.md                 ← this file
-├── tasks/                    ← task cards (pick one per run)
+├── tasks/                    ← task cards (one per run)
+│   ├── _TEMPLATE.md          #   starting point for new tasks
 │   ├── spring_boot_2_to_3_code_review.md
 │   ├── deployment_yaml_ci_review.md
 │   └── common_reviewer.md
 ├── skills/                   ← optional deep-dive skills (loaded on demand)
-│   ├── springboot_reviewer/
-│   ├── springboot_engineer/
-│   ├── springboot_patterns/
-│   ├── springboot_security/
-│   ├── springboot_tdd/
-│   ├── springboot_verification/
-│   ├── api_design/
-│   └── coding-standards/
 ├── knowledge/                ← reference docs (P0/P1 priority)
-│   ├── spring-boot-3.0-migration-guide.md  [P0]
-│   ├── baeldung-spring-boot-3-migration.md [P1]
-│   └── severity_rubric.md
-├── clinerules/               ← Cline-specific behavioral rules
+├── clinerules/               ← behavioral rules
 └── templates/
     └── review_report_template.md
+
+.clinerules/
+└── project.md                ← Cline entry point (auto-route → BOOTSTRAP → task)
 ```
-
-Skills and knowledge are **optional** — the two mandatory files (`BOOTSTRAP.md` + task card) are self-contained.
-
----
-
-## Adding a New Task Card
-
-1. Copy `tasks/common_reviewer.md` as a starting point
-2. Fill in the 6 fields: Role, Goal, Scope, Checks (≤ 5), Evidence, Constraints
-3. Add it to the table above
-
-Keep each task card under 100 lines. If it grows larger, extract reusable logic into a skill under `ai/skills/`.
