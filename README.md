@@ -1,42 +1,177 @@
 # cline-springboot-migration-demo
 
-A **demo repository** to bootstrap Cline skills + rules for:
-1) **Spring Boot 2 → 3 Migration (repo review + fix plan)**
-2) **Spring Boot 2 → 3 Reviewer (extends a common code reviewer)**
-3) **Common Reviewer (repo code review baseline)**
+[繁體中文](README.zh-TW.md)
 
-## Repo layout
+A Cline skills + rules kit for **Spring Boot 2 to 3 migration code review**.
 
-- `ai/skills/`
-  - Skills (what to do + output contract)
-- `ai/clinerules/`
-  - Rules (how to behave; consistent formatting; evidence requirements)
-- `ai/templates/`
-  - Reusable report templates + checklists
-- `examples/`
-  - Example output reports and “toy” repo snippets for dry-run
+Load this repo as context in Cline, point it at a target repo, and get a structured review report with Critical/Warn/Suggestion findings, a prioritized fix plan, and verification commands — in two controlled steps.
 
-## How to use in Cline (suggested)
-- Load the repo as your “knowledge base”.
-- Pick a skill file from `ai/skills/` as the system/task prompt.
-- Apply rules from `ai/clinerules/` in addition (or paste them into Cline rules).
-- Run on a target repo path.
+---
 
-### Typical run
-1. Use `ai/skills/common_reviewer.md` to generate a baseline review.
-2. Use `ai/skills/springboot_2_to_3_migration.md` for migration blockers + plan.
-3. Use `ai/skills/springboot_2_to_3_reviewer_extends_common.md` to merge both into a single consistent report.
+## Quick Start
 
-## Output contract
-All skills use the same report structure:
-- Header (repo meta + detected stack + summary counts)
-- Findings (Critical/Warn/Suggestion) with:
-  - Where, Evidence snippet, Why, Recommended fix, References
-- Fast Fix Plan (ordered)
-- Verification Checklist (commands)
-- Assumptions / Open Questions (minimal)
+A ready-to-use copy-paste prompt is in:
 
-## Notes
-- This repo does **not** include any proprietary code.
-- You can fork it and tune rules/skills for your organization.
+```
+docs/example-prompts/springboot-2-to-3-review-and-fix.md
+```
 
+Replace the `<- change this` placeholders (branch name, build tool) and paste into Cline.
+
+The prompt runs in two gated steps:
+1. **Review** — AI reads the target repo, produces a report, then stops
+2. **Fix** — after you confirm the report, AI applies fixes and commits by area
+
+---
+
+## Repo Structure
+
+```
+cline-springboot-migration-demo/
+├── ai/
+│   ├── clinerules/          # Behavioral rules — always applied
+│   │   ├── 01_output_contract.md
+│   │   ├── 02_evidence_first.md
+│   │   ├── 03_severity.md
+│   │   ├── 04_no_fluff.md
+│   │   ├── 05_verification_commands.md
+│   │   └── 06_spring_migration_focus.md
+│   │
+│   ├── knowledge/           # Reference material the AI reads during review
+│   │   ├── spring-boot-3.0-migration-guide.md   [P0 — authoritative]
+│   │   ├── baeldung-spring-boot-3-migration.md  [P1 — supplementary]
+│   │   ├── severity_rubric.md                   [severity definitions]
+│   │   └── examples.md                          [good vs bad code patterns, optional]
+│   │
+│   ├── skills/              # Skill definitions — pick one as entry point
+│   │   ├── common_reviewer.md                             # baseline code review
+│   │   ├── springboot_2_to_3_migration.md                 # migration-specific checks
+│   │   └── springboot_2_to_3_reviewer_extends_common.md  # recommended: merges both
+│   │
+│   └── templates/
+│       └── review_report_template.md            # output format (all skills use this)
+│
+├── docs/
+│   ├── USAGE_IN_CLINE.md    # Cline-specific setup options
+│   └── example-prompts/
+│       └── springboot-2-to-3-review-and-fix.md  # copy-paste prompt for Cline
+├── examples/
+│   └── example_review_report.md   # sample output for reference
+└── README.md
+```
+
+---
+
+## Skills
+
+### Which skill to use
+
+| Goal | Skill |
+|---|---|
+| General code quality review (any project) | `common_reviewer.md` |
+| Spring Boot 2 to 3 migration blockers only | `springboot_2_to_3_migration.md` |
+| Both combined into one report (recommended) | `springboot_2_to_3_reviewer_extends_common.md` |
+
+### Skill composition
+
+`springboot_2_to_3_reviewer_extends_common.md` is the entry point. It composes:
+- `common_reviewer.md` — correctness, security, observability, build reliability
+- `springboot_2_to_3_migration.md` — Java 17, Jakarta, Security 6, HttpClient 5, Batch, config keys
+
+Findings from both are merged: duplicate issues are collapsed, stronger severity wins.
+
+---
+
+## Code Review Procedure
+
+The migration skill inspects the target repo in this order (highest ROI first):
+
+| Step | What is checked | Default severity |
+|---|---|---|
+| 1 | Spring Boot version — if < 2.7.x, flag two-step upgrade needed | Warn / Critical |
+| 2 | Java toolchain — `maven-compiler-plugin`, parent POM, Gradle `sourceCompatibility` | Critical if < 17 |
+| 3 | Dependency blockers — `javax.*` artifacts, `httpclient` 4.x, Security < 5.8, Hibernate group ID | Critical |
+| 4 | Code patterns — `javax.`, `org.apache.http.`, `WebSecurityConfigurerAdapter`, `antMatchers`, `@EnableBatchProcessing` | Critical / Warn |
+| 5 | Config property renames — `spring.redis`, `spring.data.cassandra`, removed JPA/SAML2 keys | Warn / Critical |
+| 6 | Spring Batch — `@EnableBatchProcessing` usage, multiple Job beans | Warn |
+| 7 | Packaging / runtime — WAR on external container, actuator, security implications | Warn / Critical |
+
+---
+
+## Rules
+
+All rules in `ai/clinerules/` are always applied:
+
+| File | Enforces |
+|---|---|
+| `01_output_contract` | One report per run, exact template format, no invented versions |
+| `02_evidence_first` | Every finding must cite file path + code snippet |
+| `03_severity` | Critical = guaranteed break · Warn = likely break · Suggestion = quality |
+| `04_no_fluff` | Actionable, repo-specific recommendations only — no generic advice |
+| `05_verification_commands` | Report must end with build, test, and dependency-inspection commands |
+| `06_spring_migration_focus` | Always check all 6 Spring-specific areas; mark N/A with rationale if not applicable |
+
+---
+
+## Knowledge Base
+
+| File | Priority | Purpose |
+|---|---|---|
+| `spring-boot-3.0-migration-guide.md` | **P0 — authoritative** | Official Spring guide; wins all conflicts |
+| `baeldung-spring-boot-3-migration.md` | P1 — supplementary | Practical examples, HttpClient 5.x migration detail |
+| `severity_rubric.md` | Reference | Detailed severity definitions |
+| `examples.md` | Optional | Good vs bad code patterns; consulted when writing fix snippets |
+
+### Known conflicts between P0 and P1
+
+| Topic | P0 (correct) | P1 (imprecise) |
+|---|---|---|
+| JPA property name | `spring.jpa.hibernate.use-new-id-generator-mappings` | `spring.jpa.hibernate.use-new-id-generator` (missing `-mappings`) |
+| Trailing slash | Default changed to `false` — still configurable | Described as "deprecated" |
+
+---
+
+## Report Format
+
+Every review produces one Markdown file following `ai/templates/review_report_template.md`:
+
+```
+# Review Report — <repo>
+
+## Overview          <- repo meta table + GO / GO-with-fixes / NO-GO
+## Summary           <- counts table: Critical | Warning | Suggestion
+## Findings
+   ### Critical      <- [CRITICAL] ID — Title
+   ### Warning       <- [WARN] ID — Title        each with:
+   ### Suggestion    <- [SUGGESTION] ID — Title    Where · Evidence · Why · Fix · Action items
+## Strengths         <- what is done well
+## Priority Plan     <- P0 / P1 / P2 tables with file + estimated effort
+## Verification Checklist  <- build · test · smoke commands
+## Assumptions / Open Questions
+```
+
+Output filename: `review-report-<repo-name>-<YYYYMMDD>.md` saved to the project root.
+
+See `examples/example_review_report.md` for a complete sample output.
+
+---
+
+## Severity Reference
+
+| Level | Meaning | Action |
+|---|---|---|
+| **Critical** | Guaranteed build or runtime break | Must fix before merge |
+| **Warn** | Likely break or behavior change requiring verification | Fix soon |
+| **Suggestion** | Code quality improvement | Backlog / nice to have |
+
+When uncertain between two levels, choose the higher one and explain why.
+
+---
+
+## Customization
+
+This repo has no proprietary code. Fork it and:
+- Add rules to `ai/clinerules/` for your org's conventions
+- Add knowledge files to `ai/knowledge/` and register them in the skill's Knowledge Base section
+- Adjust severity thresholds in `ai/knowledge/severity_rubric.md`
+- Extend the report template in `ai/templates/review_report_template.md`
