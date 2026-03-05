@@ -3,7 +3,7 @@
 ## Mission
 
 Apply fixes to a Spring Boot 2.x codebase to make it compatible with Spring Boot 3.x.
-Work from the findings in a review report produced by `ai/skills/springboot_reviewer/sb3_reviewer.md`.
+Work from the findings in a review report produced by `ai/skills/springboot_migration/reviewer.md`.
 Do not invent new findings — fix only what the report identified.
 
 ## Composition
@@ -149,10 +149,13 @@ Gradle:
 - `./gradlew test` → all tests pass
 - `./gradlew dependencies | rg "javax\."` → zero results
 
+## Output Contract
+Output MUST follow `ai/BOOTSTRAP.md` Standard Output Contract.
+Optional: export to file using `ai/templates/review_report_template.md` when operator requests.
+
 ## Done Definition
 
 - All Critical findings from the review report are fixed
 - Each fix area committed separately with a descriptive message
 - Build passes: `mvn -q -DskipTests=false test`
 - Dependency tree clean: zero `javax.*` (or exceptions documented)
-- Build proof saved to: `docs/evidence/reviewer_build_pass.md`

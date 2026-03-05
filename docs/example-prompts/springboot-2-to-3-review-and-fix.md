@@ -30,8 +30,8 @@ READ FIRST (in order):
 
 | # | File                                                      | Role                     |
 |---|-----------------------------------------------------------|--------------------------|
-| 1 | ai/skills/springboot_reviewer/sb3_reviewer.md             | Step 1 entry point       |
-| 2 | ai/clinerules/ (all 6 files)                              | Behavioral constraints   |
+| 1 | ai/skills/springboot_migration/reviewer.md                | Step 1 entry point       |
+| 2 | ai/clinerules/ (all files)                                | Behavioral constraints   |
 | 3 | ai/knowledge/spring-boot-3.0-migration-guide.md           | Migration reference [P0] |
 | 4 | ai/knowledge/baeldung-spring-boot-3-migration.md          | Migration reference [P1] |
 | 5 | ai/knowledge/severity_rubric.md                           | Severity definitions     |
@@ -41,7 +41,7 @@ READ FIRST (in order):
 
 ## STEP 1 — Review
 
-Follow `ai/skills/springboot_reviewer/sb3_reviewer.md` exactly.
+Follow `ai/skills/springboot_migration/reviewer.md` exactly.
 Do NOT apply any fixes yet.
 
 Stop and wait for confirmation before proceeding to Step 2.
@@ -50,7 +50,7 @@ Stop and wait for confirmation before proceeding to Step 2.
 
 ## STEP 2 — Fix (only after Step 1 is confirmed)
 
-Follow `ai/skills/springboot_engineer/sb3_engineer.md` exactly.
+Follow `ai/skills/springboot_migration/SKILL.md` exactly.
 
 Output:
 - Branch: fix/sb3-migration  ← change this if desired
@@ -70,8 +70,8 @@ DELIVERABLES:
 - Step 2: docs/evidence/reviewer_build_pass.md + branch fix/sb3-migration
 ```
 
-> Step 1 defers to `springboot_reviewer/sb3_reviewer.md`, which internally composes `common_reviewer.md` and
-> `sb3_migration_reviewer.md`. Step 2 defers to `springboot_engineer/sb3_engineer.md`, which internally composes
+> Step 1 defers to `springboot_migration/reviewer.md`, which composes `springboot_reviewer/SKILL.md` and
+> `springboot_migration/checks.md`. Step 2 defers to `springboot_migration/SKILL.md`, which internally composes
 > `springboot_engineer/SKILL.md` and loads relevant references from
 > `springboot_engineer/references/`. The prompt only adds what the skills don't know: target
 > branch, build tool, and the two-step gate.

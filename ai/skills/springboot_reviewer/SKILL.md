@@ -17,10 +17,9 @@ Given a repository, produce a structured review report with:
 ## Optional Reference
 - `ai/knowledge/examples.md` — good vs bad code examples; consult when pattern-matching findings or writing fix snippets.
 
-## Required Output Contract
-Use **exactly** the format in `ai/templates/review_report_template.md`.
-- Findings MUST be categorized: **Critical / Warn / Suggestion**
-- Each finding MUST include: **Where + Evidence + Why + Fix (+ patch snippet when possible)**
+## Output Contract
+Output MUST follow `ai/BOOTSTRAP.md` Standard Output Contract.
+Optional: export to file using `ai/templates/review_report_template.md` when operator requests.
 
 ## Review Procedure
 1) Repo understanding
@@ -57,13 +56,6 @@ Use **exactly** the format in `ai/templates/review_report_template.md`.
   - Minimal smoke test path exists
   - One “context loads” test for Spring apps (if applicable)
 
-## Output
-After completing the review, write the report to a Markdown file:
-- Filename format: `review-report-<repo-name>-<YYYYMMDD>.md`
-- Location: project root directory
-- Format: follow `ai/templates/review_report_template.md`
-
 ## Done Definition
 - A single report with a clear GO/NO-GO recommendation
 - Findings are evidence-based and actionable
-- Report written to a Markdown file as specified above

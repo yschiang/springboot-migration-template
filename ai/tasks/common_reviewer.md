@@ -4,74 +4,57 @@
 |---|---|
 | **Role** | `reviewer` |
 | **Goal** | Identify correctness, reliability, security, and maintainability issues in any codebase |
-| **Scope** | Specify in your prompt — e.g. `src/`, `lib/`, a specific module or PR diff |
-| **Constraints** | Read-only. Generic checks — adapt to the language and framework in scope. |
+| **Scope** | Specify in prompt — e.g. `src/`, `lib/`, a specific module or PR diff |
+| **Constraints** | Read-only. Adapt checks to the language and framework in scope. |
 
 ---
 
-## Checks (run in order)
+## Checks
 
 ### C1 — Correctness
-- Error handling: are all errors caught, logged, and propagated correctly? No silent swallows.
+- Error handling: no silent swallows; all errors caught, logged, propagated
 - Edge cases: null/empty inputs, boundary values, concurrent access
-- Data flow: does output match what callers expect? Check return types and side effects.
-- **Flag CRITICAL** for unhandled exceptions that crash the process; **WARN** for silent error swallows
+- **CRITICAL** for unhandled exceptions that crash; **WARN** for silent swallows
 
 ### C2 — Reliability
-- Timeouts: are all outbound calls (HTTP, DB, queue) given explicit timeouts?
-- Retries: are transient failures retried with backoff? Are retries idempotent?
-- Resource cleanup: connections, file handles, threads — closed in `finally` / `try-with-resources`?
-- **Flag WARN** for missing timeouts on external calls; **CRITICAL** for connection/resource leaks
+- Timeouts: all outbound calls (HTTP, DB, queue) must have explicit timeouts
+- Resource cleanup: connections, file handles, threads — closed in `finally` / `try-with-resources`
+- **WARN** for missing timeouts; **CRITICAL** for resource leaks
 
 ### C3 — Security hygiene
-- Input validation: are all external inputs validated before use (SQL, shell, path traversal)?
-- Secrets: no hardcoded credentials, tokens, or keys anywhere in code or config examples
-- AuthZ boundaries: does the code verify the caller is authorized, not just authenticated?
-- Dependency versions: are known-vulnerable versions in use? (`mvn dependency:tree`, `npm audit`)
-- **Flag CRITICAL** for injection risks or hardcoded secrets; **WARN** for missing input validation
+- Input validation: SQL, shell, path traversal
+- No hardcoded credentials, tokens, or keys in code or config
+- AuthZ: caller is authorized, not just authenticated
+- **CRITICAL** for injection risks or hardcoded secrets; **WARN** for missing validation
 
 ### C4 — Maintainability
-- Naming: are variables, functions, and classes named for intent, not implementation?
-- Complexity: functions > 50 lines or nesting > 3 levels — flag for extraction
-- Duplication: same logic copied ≥ 3 times — flag for extraction to a shared util
-- Dead code: unreachable branches, unused imports, commented-out blocks
-- **Flag SUGGESTION** for all; escalate to **WARN** if complexity masks a correctness risk
+- Functions > 50 lines or nesting > 3 levels → flag for extraction
+- Same logic copied ≥ 3 times → flag for shared util
+- Dead code: unreachable branches, unused imports
+- **SUGGESTION** for all; **WARN** if complexity masks a correctness risk
 
 ### C5 — Build and test reliability
-- Does a passing build exist? Is CI configured?
-- Is there at least one test that exercises the main path end-to-end?
-- Are tests deterministic? (no random data, no sleep-based timing)
-- Test coverage signal — not a hard number, but: are critical paths covered?
-- **Flag WARN** for untested critical paths; **SUGGESTION** for low coverage on edge cases
+- At least one test exercises the main path end-to-end
+- Tests are deterministic (no random data, no sleep-based timing)
+- **WARN** for untested critical paths; **SUGGESTION** for low edge-case coverage
 
 ---
 
-## Evidence Requirements
+## Evidence
 
-**Output must include:**
-- For each finding: `file:line` + the offending snippet (≤ 10 lines)
-- Build and test output if runnable:
-  ```shell
-  # Java/Maven
-  mvn -q -DskipTests=false test
-
-  # Node
-  npm test
-
-  # Python
-  pytest -q
-  ```
-- Dependency vulnerability scan if applicable:
-  ```shell
-  mvn dependency:check    # OWASP
-  npm audit
-  pip-audit
-  ```
+- Each finding: `file:line` + snippet (≤ 10 lines)
+- Validation: run the project's test command (`mvn test`, `npm test`, `pytest -q`, etc.)
 
 ---
 
-## Optional Skills
+## SkillRefs
 
-If available, load for additional guidance:
-- `ai/skills/coding-standards/SKILL.md` — naming and structure conventions
-- `ai/skills/api_design/SKILL.md` — REST API contract checks
+SkillRefs: ai/skills/springboot_reviewer/SKILL.md, ai/skills/coding-standards/SKILL.md
+
+---
+
+## DoD
+
+- One report following `ai/BOOTSTRAP.md` Standard Output Contract
+- Findings are evidence-based and actionable
+- Clear GO/GO-with-fixes/NO-GO verdict

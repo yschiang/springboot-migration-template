@@ -30,12 +30,12 @@ The prompt runs in two gated steps:
 cline-springboot-migration-demo/
 ├── ai/
 │   ├── clinerules/          # Behavioral rules — always applied
-│   │   ├── 01_output_contract.md
 │   │   ├── 02_evidence_first.md
 │   │   ├── 03_severity.md
 │   │   ├── 04_no_fluff.md
-│   │   ├── 05_verification_commands.md
-│   │   └── 06_spring_migration_focus.md
+│   │   ├── 06_spring_migration_focus.md
+│   │   ├── coding-style.md
+│   │   └── security.md
 │   │
 │   ├── knowledge/           # Reference material the AI reads during review
 │   │   ├── spring-boot-3.0-migration-guide.md   [P0 — authoritative]
@@ -44,21 +44,22 @@ cline-springboot-migration-demo/
 │   │   └── examples.md                          [good vs bad code patterns, optional]
 │   │
 │   ├── skills/
-│   │   ├── springboot_reviewer/     # REVIEWER chain (Step 1, read-only)
-│   │   │   ├── sb3_reviewer.md      #   entry point — merges both reviewers
-│   │   │   ├── common_reviewer.md   #   baseline code review
-│   │   │   └── sb3_migration_reviewer.md  #   migration-specific checks
+│   │   ├── springboot_reviewer/     # Generic baseline code review
+│   │   │   └── SKILL.md             #   entry point — correctness, security, reliability
 │   │   │
-│   │   └── springboot_engineer/     # ENGINEER chain (Step 2, applies fixes)
-│   │       ├── sb3_engineer.md      #   entry point — SB2→3 migration fixes
-│   │       ├── SKILL.md             #   base engineer role, constraints, workflow
-│   │       ├── README.md            #   skill documentation
-│   │       └── references/          #   loaded on-demand
-│   │           ├── web.md
-│   │           ├── data.md
-│   │           ├── security.md
-│   │           ├── cloud.md
-│   │           └── testing.md
+│   │   ├── springboot_engineer/     # Generic Spring Boot engineer
+│   │   │   ├── SKILL.md             #   entry point — role, constraints, workflow
+│   │   │   └── references/          #   loaded on-demand
+│   │   │       ├── web.md
+│   │   │       ├── data.md
+│   │   │       ├── security.md
+│   │   │       ├── cloud.md
+│   │   │       └── testing.md
+│   │   │
+│   │   └── springboot_migration/           # SB2→3 migration (reviewer + engineer + checks)
+│   │       ├── SKILL.md             #   engineer entry — fix patterns, fix order
+│   │       ├── reviewer.md          #   reviewer entry — merges generic + migration checks
+│   │       └── checks.md            #   migration-specific 7-step checklist
 │   │
 │   └── templates/
 │       └── review_report_template.md            # output format (all skills use this)
@@ -81,39 +82,37 @@ Skills are split into two chains — **Reviewer** (Step 1, read-only) and **Engi
 ```
 REVIEWER chain                                   ENGINEER chain
 ─────────────────────────────────────            ──────────────────────────────────────────
-springboot_reviewer/common_reviewer.md           springboot_engineer/SKILL.md
+springboot_reviewer/SKILL.md (generic base)      springboot_engineer/SKILL.md (generic base)
         ↑                                                    ↑
-springboot_reviewer/sb3_migration_reviewer.md    springboot_engineer/sb3_engineer.md
+springboot_migration/checks.md (migration checklist)    springboot_migration/SKILL.md (SB2→3 specific)
         ↑
-springboot_reviewer/sb3_reviewer.md
+springboot_migration/reviewer.md (SB2→3 entry)
 ```
 
 ### Which skill to use
 
-| Step | Goal | Entry point skill |
+| Step | Goal | Entry point (SKILL.md) |
 |---|---|---|
-| Review | General code quality (any project) | `springboot_reviewer/common_reviewer.md` |
-| Review | SB2 to SB3 migration blockers only | `springboot_reviewer/sb3_migration_reviewer.md` |
-| Review | Both combined — recommended | `springboot_reviewer/sb3_reviewer.md` |
-| Fix | SB2 to SB3 migration fixes | `springboot_engineer/sb3_engineer.md` |
+| Review | General code quality (any project) | `springboot_reviewer/SKILL.md` |
+| Review | SB2→3 migration — recommended | `springboot_migration/reviewer.md` |
+| Fix | SB2 to SB3 migration fixes | `springboot_migration/SKILL.md` |
 | Fix | General Spring Boot engineering | `springboot_engineer/SKILL.md` |
 
 ### Reviewer skill composition
 
-`springboot_reviewer/sb3_reviewer.md` composes:
-- `common_reviewer.md` — correctness, security, observability, build reliability
-- `sb3_migration_reviewer.md` — Java 17, Jakarta, Security 6, HttpClient 5, Batch, config keys
+`springboot_reviewer/SKILL.md` is the generic baseline covering correctness, security, observability, and build reliability.
 
-Findings from both are merged: duplicate issues collapsed, stronger severity wins.
+For SB2→3 migration, `springboot_migration/reviewer.md` composes the generic reviewer with `springboot_migration/checks.md` (Java 17, Jakarta, Security 6, HttpClient 5, Batch, config keys). Findings from both are merged: duplicate issues collapsed, stronger severity wins.
 
 ### Engineer skill composition
 
-`springboot_engineer/sb3_engineer.md` composes:
+`springboot_migration/SKILL.md` composes:
 - `springboot_engineer/SKILL.md` — base engineer role, constraints, output quality bar
 - Loads `springboot_engineer/references/` selectively (security.md, data.md, web.md, testing.md) based on what the fix touches
+- Works from findings produced by `springboot_migration/reviewer.md`
 - Migration knowledge base P0/P1 for fix patterns
 
-See `ai/skills/springboot_engineer/README.md` for the base engineer skill documentation.
+See `ai/skills/springboot_engineer/SKILL.md` for the base engineer skill documentation.
 
 ---
 
@@ -139,12 +138,12 @@ All rules in `ai/clinerules/` are always applied:
 
 | File | Enforces |
 |---|---|
-| `01_output_contract` | One report per run, exact template format, no invented versions |
 | `02_evidence_first` | Every finding must cite file path + code snippet |
 | `03_severity` | Critical = guaranteed break · Warn = likely break · Suggestion = quality |
 | `04_no_fluff` | Actionable, repo-specific recommendations only — no generic advice |
-| `05_verification_commands` | Report must end with build, test, and dependency-inspection commands |
 | `06_spring_migration_focus` | Always check all 6 Spring-specific areas; mark N/A with rationale if not applicable |
+| `coding-style` | Coding style conventions and formatting rules |
+| `security` | Security-related behavioral constraints |
 
 ---
 

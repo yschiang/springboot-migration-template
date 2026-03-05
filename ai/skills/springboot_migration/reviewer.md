@@ -8,11 +8,12 @@ Produce **one merged review report** that:
 
 ## Composition
 You MUST incorporate:
-- `ai/skills/springboot_reviewer/common_reviewer.md`
-- `ai/skills/springboot_reviewer/sb3_migration_reviewer.md`
+- `ai/skills/springboot_reviewer/SKILL.md`
+- `ai/skills/springboot_migration/checks.md`
 
-## Required Output Contract
-Use **exactly** the format in `ai/templates/review_report_template.md`.
+## Output Contract
+Output MUST follow `ai/BOOTSTRAP.md` Standard Output Contract.
+Optional: export to file using `ai/templates/review_report_template.md` when operator requests.
 
 ## Merge Rules
 - If both skills produce similar findings, **merge into one** with:
@@ -27,14 +28,7 @@ Order findings:
 3) Config/deployment risks
 4) Suggestions
 
-## Output
-After completing the review, write the report to a Markdown file:
-- Filename format: `review-report-<repo-name>-<YYYYMMDD>.md`
-- Location: project root directory
-- Format: follow `ai/templates/review_report_template.md`
-
 ## Done Definition
 - Exactly one report
 - No repeated duplicated findings
 - Clear GO/GO-with-fixes/NO-GO decision
-- Report written to a Markdown file as specified above
