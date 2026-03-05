@@ -50,3 +50,11 @@
 ## SkillRefs
 
 SkillRefs: ai/skills/springboot_reviewer/SKILL.md, ai/skills/coding-standards/SKILL.md
+
+---
+
+## DoD
+
+- One report following `ai/BOOTSTRAP.md` Standard Output Contract
+- Findings are evidence-based and actionable
+- Clear GO/GO-with-fixes/NO-GO verdict

@@ -27,8 +27,9 @@ When the two sources disagree, apply these rules:
    - Baeldung: describes the option as "deprecated" (imprecise)
    - The configuration option is NOT deprecated; only the default changed.
 
-## Required Output Contract
-Use **exactly** the format in `ai/templates/review_report_template.md`.
+## Output Contract
+Output MUST follow `ai/BOOTSTRAP.md` Standard Output Contract.
+Optional: export to file using `ai/templates/review_report_template.md` when operator requests.
 
 ## Migration Key Constraints (anchor)
 - Spring Boot 3 requires **Java 17+** and Spring Framework 6.
@@ -93,13 +94,6 @@ Gradle:
 - `./gradlew test`
 - `./gradlew dependencies | rg "javax\.|jakarta\."`
 
-## Output
-After completing the review, write the report to a Markdown file:
-- Filename format: `review-report-<repo-name>-<YYYYMMDD>.md`
-- Location: project root directory
-- Format: follow `ai/templates/review_report_template.md`
-
 ## Done Definition
 - A single report with Critical/Warn/Suggestion
 - Priority Plan ordered: Java → deps → code → config → batch → tests → runtime
-- Report written to a Markdown file as specified above

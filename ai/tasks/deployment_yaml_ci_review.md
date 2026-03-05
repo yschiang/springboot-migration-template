@@ -47,5 +47,12 @@
 
 ## SkillRefs
 
-<!-- TODO: add a dedicated k8s/helm/kustomize review skill when one exists -->
 SkillRefs: ai/skills/springboot_verification/SKILL.md
+
+---
+
+## DoD
+
+- One report following `ai/BOOTSTRAP.md` Standard Output Contract
+- Every finding includes the manifest path and offending YAML block
+- Clear GO/GO-with-fixes/NO-GO verdict

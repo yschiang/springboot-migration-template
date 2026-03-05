@@ -1,132 +1,111 @@
-# AI — How to Use in 30 Seconds
+# AI Pipeline — Maintainer Guide
 
-## Cline (auto-routing)
+## Pipeline Diagram
+
+```
+                .clinerules/project.md          (auto-loaded by Cline)
+                        |
+                        v
+               ai/TASKBOARD.md                  (route: scope -> task card)
+                        |
+                        v
+               ai/tasks/<card>.md               (WHAT: Role, Goal, Checks, SkillRefs)
+                        |
+            +-----------+-----------+
+            |                       |
+            v                       v
+   ai/skills/<skill>/SKILL.md  ai/BOOTSTRAP.md  (HOW + output contract)
+```
+
+## SSOT Responsibility Table
+
+| Layer | Path | Responsibility |
+|---|---|---|
+| Entry router | `.clinerules/project.md` | Strict load sequence; SkillRefs are mandatory |
+| Output contract | `ai/BOOTSTRAP.md` | THE one canonical output format |
+| Routing | `ai/TASKBOARD.md` | Scope signal -> exactly one task card |
+| Task cards | `ai/tasks/*` | Role, Goal, Scope, Checks, SkillRefs, DoD |
+| Skills | `ai/skills/*/SKILL.md` | HOW: detailed checklists, procedures, patterns |
+| Knowledge | `ai/knowledge/*` | Reference docs |
+| Behavioral rules | `ai/clinerules/*` | Always-on constraints |
+| Templates | `ai/templates/*` | Optional export formats (cannot override BOOTSTRAP) |
+
+## Usage Examples
+
+### Example 1 — Cline (auto-routing)
 
 Just open the repo in Cline. It auto-loads `.clinerules/project.md`, which:
 1. Reads `ai/TASKBOARD.md` and infers scope from your repo structure
 2. Picks the right task card automatically
-3. Loads `ai/BOOTSTRAP.md` for output format
-4. Executes — no setup required
+3. Loads all SkillRefs declared in the task card
+4. Loads `ai/BOOTSTRAP.md` for output format
+5. Executes — no setup required
 
-## Claude Code / other agents (manual)
+### Example 2 — Claude Code / other agents (manual)
 
 ```
 1. Copy ai/BOOTSTRAP.md
 2. Copy one task card from ai/tasks/
-3. Paste both to your agent
+3. Copy all files listed in the task card's SkillRefs: line
+4. Paste all to your agent
 ```
-
----
 
 ## Task Cards
 
 | Task | File | Default Role |
 |---|---|---|
-| Spring Boot 2→3 review or fix | `tasks/spring_boot_2_to_3_code_review.md` | `reviewer` |
+| Spring Boot 2->3 review or fix | `tasks/spring_boot_2_to_3_code_review.md` | `reviewer` |
 | Deployment YAML / CI review | `tasks/deployment_yaml_ci_review.md` | `ops` |
 | Generic code review | `tasks/common_reviewer.md` | `reviewer` |
 
-Role enums: `reviewer` (read-only) · `submitter` (apply fixes) · `ops` (infra review)
-
----
-
-## Example 1 — Review src/ for Spring Boot migration
-
-```
-[paste ai/BOOTSTRAP.md]
-
----
-
-[paste ai/tasks/spring_boot_2_to_3_code_review.md]
-
----
-
-Target: src/
-Build tool: Maven
-```
-
-Output: structured report with CRITICAL/WARN/SUGGESTION. Set `Role: submitter` in follow-up to apply fixes.
-
----
-
-## Example 2 — Ops review for charts/
-
-```
-[paste ai/BOOTSTRAP.md]
-
----
-
-[paste ai/tasks/deployment_yaml_ci_review.md]
-
----
-
-Target: charts/
-Environment: production
-```
-
-Output: Ingress pathType, probes, secrets hygiene, resource limits, helm lint results.
-
----
-
-## Single Source of Truth (SSOT)
-
-| Layer | Path | Responsibility |
-|---|---|---|
-| Behavioral rules | `ai/clinerules/*` | Always-on constraints (evidence, severity, security) |
-| Routing | `ai/TASKBOARD.md` | Picks exactly one task card based on scope |
-| Task cards | `ai/tasks/*` | What to do: Role, Goal, Scope, Checks, SkillRefs |
-| Skills | `ai/skills/*` | How to do it: detailed checklists, procedures, patterns |
-| Templates | `ai/templates/*` | Output format used by skills |
-| Knowledge | `ai/knowledge/*` | Reference docs (P0/P1 priority) |
-
-`.clinerules/project.md` auto-loads SkillRefs declared by the chosen task card — they are not optional once declared.
-
----
+Role enums: `reviewer` (read-only) / `submitter` (apply fixes) / `ops` (infra review)
 
 ## Adding a New Task Card
 
 1. Copy `tasks/_TEMPLATE.md`
-2. Fill in: Role, Goal, Scope, Checks (≤ 5), Evidence
+2. Fill in: Role, Goal, Scope, Checks (3-5 items), Evidence, SkillRefs
 3. Add a routing rule to `ai/TASKBOARD.md`
 4. Add it to the table above
+5. Keep each task card under 80 lines
 
-Keep each task card under 80 lines.
+## Adding a New Skill
 
----
+1. Create a directory under `ai/skills/` with a `SKILL.md` entry point
+2. For composition, reference other skills via their `SKILL.md` path
+3. Reference the skill from task card SkillRefs
+4. Output must follow `ai/BOOTSTRAP.md` Standard Output Contract
 
 ## Directory Layout
 
 ```
 ai/
-├── BOOTSTRAP.md              ← working contract + output format (always loaded)
-├── TASKBOARD.md              ← routing rules: scope → task card
-├── README.md                 ← this file
-├── tasks/                    ← task cards (one per run)
-│   ├── _TEMPLATE.md          #   starting point for new tasks
+├── BOOTSTRAP.md              <- THE one output contract (always loaded)
+├── TASKBOARD.md              <- routing rules: scope -> task card
+├── SSOT.md                   <- what belongs where (quick ref)
+├── README.md                 <- this file
+├── tasks/                    <- task cards (one per run)
+│   ├── _TEMPLATE.md
 │   ├── spring_boot_2_to_3_code_review.md
-│   ├── deployment_yaml_ci_review.md
-│   └── common_reviewer.md
-├── skills/                   ← optional deep-dive skills (loaded on demand)
-│   ├── springboot_reviewer/  #   generic baseline code review
-│   │   └── SKILL.md
-│   ├── springboot_engineer/  #   generic Spring Boot 3.x engineer
-│   │   ├── SKILL.md
-│   │   └── references/
-│   ├── springboot_migration/        #   SB2→3 specific (reviewer + engineer + checks)
-│   │   ├── SKILL.md          #     engineer entry
-│   │   ├── reviewer.md       #     reviewer entry
-│   │   └── checks.md         #     migration checklist
+│   ├── common_reviewer.md
+│   └── deployment_yaml_ci_review.md
+├── skills/                   <- detailed checklists and procedures
+│   ├── springboot_reviewer/
+│   │   └── SKILL.md          # baseline code review
+│   ├── springboot_engineer/
+│   │   ├── SKILL.md          # Spring Boot 3.x engineer
+│   │   └── references/       # on-demand: web, data, security, cloud, testing
+│   ├── springboot_migration/
+│   │   ├── SKILL.md          # SB2->3 migration engineer
+│   │   ├── reviewer.md       # SB2->3 migration reviewer
+│   │   └── checks.md         # 7-step migration checklist
 │   ├── api_design/SKILL.md
 │   ├── coding-standards/SKILL.md
 │   ├── springboot_patterns/SKILL.md
 │   ├── springboot_security/SKILL.md
 │   ├── springboot_tdd/SKILL.md
 │   └── springboot_verification/SKILL.md
-├── knowledge/                ← reference docs (P0/P1 priority)
-├── clinerules/               ← behavioral rules
+├── knowledge/                <- reference docs
+├── clinerules/               <- behavioral rules
 └── templates/
     └── review_report_template.md
-
-.clinerules/
-└── project.md                ← Cline entry point (auto-route → BOOTSTRAP → task)
 ```

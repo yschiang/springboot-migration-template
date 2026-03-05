@@ -9,15 +9,6 @@
 
 ---
 
-## Role Switch
-
-**reviewer (default):** produce a report. Stop before changing any file.
-
-**submitter:** apply fixes in this order:
-1. Java toolchain → 2. Dependencies → 3. Code (javax→jakarta) → 4. Config → 5. Security → 6. Tests
-
----
-
 ## Checks
 
 ### C1 — Java 17 toolchain
@@ -51,10 +42,16 @@
 
 - Each finding: `file:line` + snippet (≤ 10 lines)
 - Validation: `mvn -q -DskipTests=false test`
-- Submitter: save build proof to `docs/evidence/build_pass.md`
 
 ---
 
 ## SkillRefs
 
 SkillRefs: ai/skills/springboot_migration/reviewer.md, ai/skills/springboot_migration/SKILL.md, ai/knowledge/spring-boot-3.0-migration-guide.md
+
+---
+
+## DoD
+
+- Reviewer: one report following `ai/BOOTSTRAP.md` Standard Output Contract with clear GO/GO-with-fixes/NO-GO verdict
+- Submitter: all Critical findings fixed, each area committed separately, build passes (`mvn -q -DskipTests=false test`)

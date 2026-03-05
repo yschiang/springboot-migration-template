@@ -35,3 +35,11 @@
 ## SkillRefs
 
 SkillRefs: ai/skills/<relevant_skill>/SKILL.md
+
+---
+
+## DoD
+
+- One report following `ai/BOOTSTRAP.md` Standard Output Contract
+- Findings are evidence-based and actionable
+- Clear GO/GO-with-fixes/NO-GO verdict
