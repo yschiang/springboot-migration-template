@@ -57,4 +57,4 @@
 
 ## SkillRefs
 
-SkillRefs: ai/skills/springboot_reviewer/sb3_reviewer.md, ai/skills/springboot_engineer/sb3_engineer.md, ai/knowledge/spring-boot-3.0-migration-guide.md
+SkillRefs: ai/skills/springboot_migration/reviewer.md, ai/skills/springboot_migration/SKILL.md, ai/knowledge/spring-boot-3.0-migration-guide.md

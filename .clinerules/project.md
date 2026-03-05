@@ -7,7 +7,7 @@ This file is auto-loaded by Cline on every session.
 1. Read `ai/TASKBOARD.md`.
 2. Infer scope from changed files (`git diff --name-only`) or repo directory structure.
 3. Select **exactly one** task card. Do not ask the user to choose — pick the best match.
-4. If unclear, pick the lowest-risk option (prefer `common_reviewer.md`).
+4. If unclear, pick the lowest-risk option (prefer `tasks/common_reviewer.md`).
 
 ## Step 1 — Load the contract
 

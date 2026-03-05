@@ -107,6 +107,21 @@ ai/
 │   ├── deployment_yaml_ci_review.md
 │   └── common_reviewer.md
 ├── skills/                   ← optional deep-dive skills (loaded on demand)
+│   ├── springboot_reviewer/  #   generic baseline code review
+│   │   └── SKILL.md
+│   ├── springboot_engineer/  #   generic Spring Boot 3.x engineer
+│   │   ├── SKILL.md
+│   │   └── references/
+│   ├── springboot_migration/        #   SB2→3 specific (reviewer + engineer + checks)
+│   │   ├── SKILL.md          #     engineer entry
+│   │   ├── reviewer.md       #     reviewer entry
+│   │   └── checks.md         #     migration checklist
+│   ├── api_design/SKILL.md
+│   ├── coding-standards/SKILL.md
+│   ├── springboot_patterns/SKILL.md
+│   ├── springboot_security/SKILL.md
+│   ├── springboot_tdd/SKILL.md
+│   └── springboot_verification/SKILL.md
 ├── knowledge/                ← reference docs (P0/P1 priority)
 ├── clinerules/               ← behavioral rules
 └── templates/

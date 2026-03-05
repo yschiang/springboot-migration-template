@@ -49,4 +49,4 @@
 
 ## SkillRefs
 
-SkillRefs: ai/skills/springboot_reviewer/common_reviewer.md, ai/skills/coding-standards/SKILL.md
+SkillRefs: ai/skills/springboot_reviewer/SKILL.md, ai/skills/coding-standards/SKILL.md
