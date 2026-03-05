@@ -45,6 +45,7 @@
 
 ---
 
-## Optional Skills
+## SkillRefs
 
-- `ai/skills/springboot_verification/SKILL.md` — verification loop for build + security scans
+<!-- TODO: add a dedicated k8s/helm/kustomize review skill when one exists -->
+SkillRefs: ai/skills/springboot_verification/SKILL.md

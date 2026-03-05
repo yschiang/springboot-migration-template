@@ -47,7 +47,6 @@
 
 ---
 
-## Optional Skills
+## SkillRefs
 
-- `ai/skills/coding-standards/SKILL.md` — naming and structure conventions
-- `ai/skills/api_design/SKILL.md` — REST API contract checks
+SkillRefs: ai/skills/springboot_reviewer/common_reviewer.md, ai/skills/coding-standards/SKILL.md

@@ -55,8 +55,6 @@
 
 ---
 
-## Optional Skills
+## SkillRefs
 
-- `ai/skills/springboot_reviewer/sb3_reviewer.md` — detailed migration checklist
-- `ai/skills/springboot_engineer/sb3_engineer.md` — fix patterns and code templates
-- `ai/knowledge/spring-boot-3.0-migration-guide.md` — authoritative reference [P0]
+SkillRefs: ai/skills/springboot_reviewer/sb3_reviewer.md, ai/skills/springboot_engineer/sb3_engineer.md, ai/knowledge/spring-boot-3.0-migration-guide.md

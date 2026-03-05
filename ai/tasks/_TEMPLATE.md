@@ -32,6 +32,6 @@
 
 ---
 
-## Optional Skills
+## SkillRefs
 
-- `ai/skills/<relevant_skill>/SKILL.md` — loaded on demand
+SkillRefs: ai/skills/<relevant_skill>/SKILL.md

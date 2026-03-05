@@ -13,6 +13,11 @@ This file is auto-loaded by Cline on every session.
 
 Read `ai/BOOTSTRAP.md`. This defines working rules, severity levels, and output format.
 
+## Step 1.5 — Load SkillRefs
+
+If the selected task card contains a `SkillRefs:` line, read **every** file listed there before executing.
+These are not optional — they provide the detailed checklist or procedure the task card summarizes.
+
 ## Step 2 — Execute
 
 1. Read every file listed in the task card's **Scope**.
@@ -26,4 +31,4 @@ Read `ai/BOOTSTRAP.md`. This defines working rules, severity levels, and output 
 - Never self-identify or announce your role. Just execute.
 - Stay within declared Scope. Do not touch files outside it.
 - When uncertain between two severity levels, choose the higher one.
-- Load optional skills from `ai/skills/` only if referenced by the task card.
+- If the task card declares SkillRefs, you must read them. Do not skip.

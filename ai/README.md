@@ -68,6 +68,21 @@ Output: Ingress pathType, probes, secrets hygiene, resource limits, helm lint re
 
 ---
 
+## Single Source of Truth (SSOT)
+
+| Layer | Path | Responsibility |
+|---|---|---|
+| Behavioral rules | `ai/clinerules/*` | Always-on constraints (evidence, severity, security) |
+| Routing | `ai/TASKBOARD.md` | Picks exactly one task card based on scope |
+| Task cards | `ai/tasks/*` | What to do: Role, Goal, Scope, Checks, SkillRefs |
+| Skills | `ai/skills/*` | How to do it: detailed checklists, procedures, patterns |
+| Templates | `ai/templates/*` | Output format used by skills |
+| Knowledge | `ai/knowledge/*` | Reference docs (P0/P1 priority) |
+
+`.clinerules/project.md` auto-loads SkillRefs declared by the chosen task card — they are not optional once declared.
+
+---
+
 ## Adding a New Task Card
 
 1. Copy `tasks/_TEMPLATE.md`
