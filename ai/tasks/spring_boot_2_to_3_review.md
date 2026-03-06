@@ -53,8 +53,7 @@ SkillRefs: ai/skills/springboot_migration/reviewer.md
 
 ## DoD
 
-- Write **two** report files using `ai/templates/review_report_template.md` as format:
-  - `review-report-<repo>-<YYYYMMDD>.md` — English
-  - `review-report-<repo>-<YYYYMMDD>-zh.md` — Traditional Chinese (繁體中文)
-- Both reports follow `ai/BOOTSTRAP.md` Standard Output Contract
+- Write report to `review-report-<repo>-<YYYYMMDD>.md` using `ai/templates/review_report_template.md` as format
+- Report follows `ai/BOOTSTRAP.md` Standard Output Contract
 - Clear GO/GO-with-fixes/NO-GO verdict
+- Optional: if operator requests zh, also write `review-report-<repo>-<YYYYMMDD>-zh.md` (Traditional Chinese)

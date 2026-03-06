@@ -50,6 +50,6 @@ Order findings:
 4) Suggestions
 
 ## Done Definition
-- Two reports (English + Traditional Chinese) as specified in the task card DoD
+- Exactly one report (English); optional zh translation per task card DoD
 - No repeated duplicated findings
 - Clear GO/GO-with-fixes/NO-GO decision
