@@ -29,9 +29,6 @@ The prompt runs in two gated steps:
 ```
 cline-springboot-migration-demo/
 ├── ai/
-│   ├── BOOTSTRAP.md          # THE one canonical output contract (SSOT)
-│   ├── TASKBOARD.md          # Routing: scope → task card
-│   ├── SSOT.md               # What belongs where (quick ref)
 │   ├── README.md             # Maintainer guide + pipeline diagram
 │   │
 │   ├── tasks/                # Task cards — one per run (WHAT to do)
@@ -42,10 +39,13 @@ cline-springboot-migration-demo/
 │   │   └── deployment_yaml_ci_review.md
 │   │
 │   ├── clinerules/          # Behavioral rules — always applied
+│   │   ├── 01_read_before_write.md
 │   │   ├── 02_evidence_first.md
 │   │   ├── 03_severity.md
 │   │   ├── 04_no_fluff.md
+│   │   ├── 05_minimal_diff.md
 │   │   ├── 06_spring_migration_focus.md
+│   │   ├── 07_one_output.md
 │   │   ├── coding-style.md
 │   │   └── security.md
 │   │
@@ -74,7 +74,7 @@ cline-springboot-migration-demo/
 │   │       └── checks.md            #   migration-specific 7-step checklist
 │   │
 │   └── templates/
-│       └── review_report_template.md            # optional export format (mirrors BOOTSTRAP.md)
+│       └── review_report_template.md            # output format for review reports
 │
 ├── docs/
 │   ├── USAGE_IN_CLINE.md    # Cline-specific setup options

@@ -11,24 +11,11 @@
 
 ## Checks
 
-### C1 — <title>
-- What to look for
-- **CRITICAL / WARN / SUGGESTION** criteria
+Acceptance criteria — detailed procedure is in SkillRefs.
 
-### C2 — <title>
-- What to look for
-- **CRITICAL / WARN / SUGGESTION** criteria
-
-### C3 — <title>
-- What to look for
-- **CRITICAL / WARN / SUGGESTION** criteria
-
----
-
-## Evidence
-
-- Each finding: `file:line` + snippet (≤ 10 lines)
-- Validation: one command to verify (e.g. `mvn test`, `helm lint .`)
+- C1: <area to verify>
+- C2: <area to verify>
+- C3: <area to verify>
 
 ---
 
@@ -40,6 +27,5 @@ SkillRefs: ai/skills/<relevant_skill>/SKILL.md
 
 ## DoD
 
-- One report following `ai/BOOTSTRAP.md` Standard Output Contract
-- Findings are evidence-based and actionable
+- Write report to `<filename>` using `ai/templates/<template>.md` as format
 - Clear GO/GO-with-fixes/NO-GO verdict

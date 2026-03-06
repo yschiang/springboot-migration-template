@@ -149,13 +149,3 @@ Gradle:
 - `./gradlew test` → all tests pass
 - `./gradlew dependencies | rg "javax\."` → zero results
 
-## Output Contract
-Output MUST follow `ai/BOOTSTRAP.md` Standard Output Contract.
-Optional: export to file using `ai/templates/review_report_template.md` when operator requests.
-
-## Done Definition
-
-- All Critical findings from the review report are fixed
-- Each fix area committed separately with a descriptive message
-- Build passes: `mvn -q -DskipTests=false test`
-- Dependency tree clean: zero `javax.*` (or exceptions documented)

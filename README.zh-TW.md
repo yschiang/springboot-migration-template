@@ -27,9 +27,6 @@ Prompt 分兩個受控步驟執行：
 ```
 cline-springboot-migration-demo/
 ├── ai/
-│   ├── BOOTSTRAP.md          # 唯一正式輸出合約（SSOT）
-│   ├── TASKBOARD.md          # 路由：scope → task card
-│   ├── SSOT.md               # 各層職責速查
 │   ├── README.md             # 維護者指南 + pipeline 架構圖
 │   │
 │   ├── tasks/                # Task cards — 每次執行一張（做什麼）
@@ -40,10 +37,13 @@ cline-springboot-migration-demo/
 │   │   └── deployment_yaml_ci_review.md
 │   │
 │   ├── clinerules/          # 行為規則 — 每次執行皆套用
+│   │   ├── 01_read_before_write.md
 │   │   ├── 02_evidence_first.md
 │   │   ├── 03_severity.md
 │   │   ├── 04_no_fluff.md
+│   │   ├── 05_minimal_diff.md
 │   │   ├── 06_spring_migration_focus.md
+│   │   ├── 07_one_output.md
 │   │   ├── coding-style.md
 │   │   └── security.md
 │   │
@@ -72,7 +72,7 @@ cline-springboot-migration-demo/
 │   │       └── checks.md                 #   遷移專項 7 步驟檢查清單
 │   │
 │   └── templates/
-│       └── review_report_template.md            # 選用匯出格式（對映 BOOTSTRAP.md）
+│       └── review_report_template.md            # 審查報告輸出格式
 │
 ├── docs/
 │   ├── USAGE_IN_CLINE.md    # Cline 設定說明

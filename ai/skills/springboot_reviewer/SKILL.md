@@ -17,10 +17,6 @@ Given a repository, produce a structured review report with:
 ## Optional Reference
 - `ai/knowledge/examples.md` — good vs bad code examples; consult when pattern-matching findings or writing fix snippets.
 
-## Output Contract
-Output MUST follow `ai/BOOTSTRAP.md` Standard Output Contract.
-Optional: export to file using `ai/templates/review_report_template.md` when operator requests.
-
 ## Review Procedure
 1) Repo understanding
 - Identify build tool, modules, runtime type, entrypoints.
@@ -39,7 +35,6 @@ Optional: export to file using `ai/templates/review_report_template.md` when ope
   - Security (authn/authz boundaries, secrets handling)
 
 4) Produce findings
-- Each finding must be grounded in a **file + snippet**.
 - Recommend fixes that are immediately actionable.
 
 ## Standard Checks (non-exhaustive)
@@ -56,6 +51,3 @@ Optional: export to file using `ai/templates/review_report_template.md` when ope
   - Minimal smoke test path exists
   - One “context loads” test for Spring apps (if applicable)
 
-## Done Definition
-- A single report with a clear GO/NO-GO recommendation
-- Findings are evidence-based and actionable

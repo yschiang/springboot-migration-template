@@ -53,6 +53,6 @@ SkillRefs: ai/skills/springboot_verification/SKILL.md
 
 ## DoD
 
-- One report following `ai/BOOTSTRAP.md` Standard Output Contract
+- Write report using `ai/templates/review_report_template.md` as format
 - Every finding includes the manifest path and offending YAML block
 - Clear GO/GO-with-fixes/NO-GO verdict

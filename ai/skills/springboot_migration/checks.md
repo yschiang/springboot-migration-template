@@ -69,6 +69,3 @@ Gradle:
 - `./gradlew test`
 - `./gradlew dependencies | rg "javax\.|jakarta\."`
 
-## Done Definition
-- A single report with Critical/Warn/Suggestion
-- Priority Plan ordered: Java → deps → code → config → batch → tests → runtime

@@ -11,25 +11,11 @@
 
 ## Checks
 
-### C1 — All Critical findings addressed
-- Every CRITICAL from the review report has a corresponding fix
-- **CRITICAL** if any are skipped without justification
+Acceptance criteria — detailed procedure is in SkillRefs.
 
-### C2 — Fix order respected
-- Java toolchain → Dependencies → Code → Config → Security → Tests
-- **WARN** if fixes applied out of order (causes cascading failures)
-
-### C3 — Build passes after fixes
-- `mvn -q -DskipTests=false test` or `./gradlew test`
-- `mvn dependency:tree | grep "javax\."` → zero results
-- **CRITICAL** if build fails or javax dependencies remain
-
----
-
-## Evidence
-
-- Each fix: `file:line` + before/after snippet
-- Validation: `mvn -q -DskipTests=false test`
+- C1: All Critical findings from the review report addressed
+- C2: Fix order respected (Java → deps → code → config → security → tests)
+- C3: Build passes after fixes, dependency tree clean of `javax.*`
 
 ---
 

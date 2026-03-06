@@ -11,37 +11,13 @@
 
 ## Checks
 
-### C1 — Java 17 toolchain
-- `pom.xml`: `<java.version>`, `maven-compiler-plugin` source/target, `<parent>` Spring Boot version
-- `build.gradle`: `sourceCompatibility`, `targetCompatibility`, `toolchain`
-- **CRITICAL** if Java < 17 anywhere
+Acceptance criteria — detailed procedure is in SkillRefs.
 
-### C2 — javax → jakarta namespace
-- `grep -r "import javax\." src/`
-- `mvn dependency:tree | grep "javax\."` or `./gradlew dependencies | grep "javax\."`
-- **CRITICAL** for every `javax.*` import or direct dependency
-
-### C3 — Spring Security
-- `grep -r "WebSecurityConfigurerAdapter\|antMatchers\|mvcMatchers" src/`
-- Must use `SecurityFilterChain` bean + `requestMatchers`
-- **CRITICAL** if found
-
-### C4 — Path matching & URL `//` normalization
-- `grep -r "setUseTrailingSlashMatch\|configurePathMatch" src/`
-- Spring Boot 3: trailing slash matching **off**; `//` not normalized
-- **WARN** if patterns found; **CRITICAL** if Ingress forwards `//` to the app
-
-### C5 — Actuator & dependency alignment
-- `httpclient` 4.x → must migrate to `httpclient5` (**CRITICAL**)
-- Missing `management.endpoint.health.probes.enabled=true` (**WARN**)
-- Spring Security version < 6.0 (**CRITICAL**)
-
----
-
-## Evidence
-
-- Each finding: `file:line` + snippet (≤ 10 lines)
-- Validation: `mvn -q -DskipTests=false test`
+- C1: Java toolchain ≥ 17
+- C2: javax → jakarta namespace (imports + dependencies)
+- C3: Spring Security API changes (antMatchers, WebSecurityConfigurerAdapter)
+- C4: Path matching behavior changes (trailing slash, URL normalization)
+- C5: Dependency alignment (HttpClient, actuator, config properties)
 
 ---
 
@@ -54,6 +30,5 @@ SkillRefs: ai/skills/springboot_migration/reviewer.md
 ## DoD
 
 - Write report to `review-report-<repo>-<YYYYMMDD>.md` using `ai/templates/review_report_template.md` as format
-- Report follows `ai/BOOTSTRAP.md` Standard Output Contract
 - Clear GO/GO-with-fixes/NO-GO verdict
 - Optional: if operator requests zh, also write `review-report-<repo>-<YYYYMMDD>-zh.md` (Traditional Chinese)

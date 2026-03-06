@@ -26,10 +26,6 @@ When the two sources disagree, apply these rules:
    - Baeldung: describes the option as "deprecated" (imprecise)
    - The configuration option is NOT deprecated; only the default changed.
 
-## Output Contract
-Output MUST follow `ai/BOOTSTRAP.md` Standard Output Contract.
-Optional: export to file using `ai/templates/review_report_template.md` when operator requests.
-
 ## Merge Rules
 - **Every finding MUST include a source tag** — no finding may omit it:
   - `[MIGRATION]` — finding from SB2→3 migration checks (`checks.md`)
@@ -50,6 +46,5 @@ Order findings:
 4) Suggestions
 
 ## Done Definition
-- Exactly one report (English); optional zh translation per task card DoD
-- No repeated duplicated findings
-- Clear GO/GO-with-fixes/NO-GO decision
+- No repeated duplicated findings (merge rules applied)
+- All other deliverables per task card DoD

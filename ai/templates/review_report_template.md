@@ -1,5 +1,5 @@
-<!-- This template is an optional export format. It mirrors ai/BOOTSTRAP.md Standard Output Contract. -->
-<!-- Skills and task cards must NOT treat this template as the canonical format — BOOTSTRAP.md is the SSOT. -->
+<!-- This template is the SSOT for review report output format. -->
+<!-- Task cards reference this template in their DoD. Behavioral rules are in ai/clinerules/. -->
 
 # Review Report — <repo>
 
