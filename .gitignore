@@ -3,3 +3,4 @@ target/
 
 # Editor / tool state
 .claude/
+.tools/

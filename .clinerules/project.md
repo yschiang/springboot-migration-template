@@ -6,9 +6,10 @@ This file is auto-loaded by Cline on every session.
 
 1. Read `ai/TASKBOARD.md`.
 2. Infer scope from changed files (`git diff --name-only`) or repo directory structure.
-3. Select **exactly one** task card. Do not ask the user to choose — pick the best match.
-4. If multiple routes match, pick the **highest priority** (lowest number).
-5. If unclear: infer from repo conventions; proceed with lowest-risk option (prefer `tasks/common_reviewer.md`).
+3. Determine **intent**: default is `review`. Switch to `fix` only when the operator explicitly uses words like "fix", "apply", "implement", or "migrate".
+4. Select **exactly one** task card. Do not ask the user to choose — pick the best match.
+5. If multiple routes match, pick the **highest priority** (lowest number).
+6. If unclear: infer from repo conventions; proceed with lowest-risk option (prefer `tasks/common_reviewer.md`).
 
 ## Step 1 — Load SkillRefs
 
