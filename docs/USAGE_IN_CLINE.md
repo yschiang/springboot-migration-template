@@ -2,7 +2,7 @@
 
 ## Option A — Single skill (SB2→3 migration review)
 Use:
-- `ai/skills/springboot_migration/reviewer.md`
+- `ai/skills/springboot_migration/SKILL.md`
 
 Also include rules:
 - `ai/clinerules/02_evidence_first.md`

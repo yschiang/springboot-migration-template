@@ -110,8 +110,8 @@ ai/
 │   │   ├── SKILL.md          # Spring Boot 3.x engineer
 │   │   └── references/       # on-demand: web, data, security, cloud, testing
 │   ├── springboot_migration/
-│   │   ├── SKILL.md          # SB2->3 migration engineer
-│   │   ├── reviewer.md       # SB2->3 migration reviewer
+│   │   ├── SKILL.md          # SB2->3 migration reviewer (entry)
+│   │   ├── engineer.md       # SB2->3 migration engineer (fix entry)
 │   │   └── checks.md         # 7-step migration checklist
 │   ├── api_design/SKILL.md
 │   ├── coding-standards/SKILL.md

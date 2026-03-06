@@ -23,7 +23,7 @@ Acceptance criteria — detailed procedure is in SkillRefs.
 
 ## SkillRefs
 
-SkillRefs: ai/skills/springboot_migration/reviewer.md
+SkillRefs: ai/skills/springboot_migration/SKILL.md
 
 ---
 

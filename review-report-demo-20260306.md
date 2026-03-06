@@ -23,7 +23,7 @@
 | **Boot Version**   | `3.2.5`                          |
 | **Java Target**    | `11` (CRITICAL — requires 17)    |
 | **Web**            | Servlet                          |
-| **Reviewed with**  | `springboot_migration/reviewer.md` → composes `springboot_reviewer/SKILL.md` + `springboot_migration/checks.md` |
+| **Reviewed with**  | `springboot_migration/SKILL.md` → composes `springboot_reviewer/SKILL.md` + `springboot_migration/checks.md` |
 | **Recommendation** | **`NO-GO`** — 5 critical blockers prevent compilation and runtime |
 
 ### Summary

@@ -67,8 +67,8 @@ cline-springboot-migration-demo/
 │   │   │       └── testing.md
 │   │   │
 │   │   └── springboot_migration/         # SB2→3 遷移（審查 + 修復 + 檢查清單）
-│   │       ├── SKILL.md                  #   工程師入口 — 修復模式、修復順序
-│   │       ├── reviewer.md               #   審查入口 — 合併通用 + 遷移檢查
+│   │       ├── SKILL.md                  #   審查入口 — 合併通用 + 遷移檢查
+│   │       ├── engineer.md               #   工程師入口 — 修復模式、修復順序
 │   │       └── checks.md                 #   遷移專項 7 步驟檢查清單
 │   │
 │   └── templates/
@@ -92,15 +92,15 @@ cline-springboot-migration-demo/
 | 目標 | Skill |
 |---|---|
 | 通用程式碼品質審查（任何專案） | `springboot_reviewer/SKILL.md` |
-| Spring Boot 2→3 遷移審查（推薦） | `springboot_migration/reviewer.md` |
-| 套用 SB2→3 遷移修復 | `springboot_migration/SKILL.md` |
+| Spring Boot 2→3 遷移審查（推薦） | `springboot_migration/SKILL.md` |
+| 套用 SB2→3 遷移修復 | `springboot_migration/engineer.md` |
 | 通用 Spring Boot 開發 | `springboot_engineer/SKILL.md` |
 
 完整 skill 架構說明請參閱 `ai/README.md`。
 
 ### Skill 組合方式
 
-`springboot_migration/reviewer.md` 組合了：
+`springboot_migration/SKILL.md` 組合了：
 - `springboot_reviewer/SKILL.md` — 正確性、安全性、可觀測性、建構可靠性
 - `springboot_migration/checks.md` — Java 17、Jakarta、Security 6、HttpClient 5、Batch、設定屬性
 
