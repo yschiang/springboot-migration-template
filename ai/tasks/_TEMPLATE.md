@@ -4,24 +4,16 @@
 |---|---|
 | **Role** | `reviewer` · `submitter` · `ops` |
 | **Goal** | One sentence: what does success look like? |
-| **Scope** | Paths to read — e.g. `src/`, `k8s/`, `pom.xml` |
 | **Constraints** | Any limits — e.g. read-only, no refactoring, one commit per area |
 
 ---
 
-## Checks
+## Full Load Order
 
-Acceptance criteria — detailed procedure is in SkillRefs.
-
-- C1: <area to verify>
-- C2: <area to verify>
-- C3: <area to verify>
-
----
-
-## SkillRefs
-
-SkillRefs: ai/skills/<relevant_skill>/SKILL.md
+| # | File | Role |
+|---|---|---|
+| 1 | `ai/skills/<relevant_skill>/SKILL.md` | Skill entry (loads its own Dependencies) |
+| 2 | `ai/templates/<template>.md` | Output format |
 
 ---
 

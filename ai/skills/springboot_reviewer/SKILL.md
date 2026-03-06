@@ -1,5 +1,11 @@
 # Skill: Common Reviewer (Repo Code Review Baseline)
 
+## Dependencies
+
+| # | File | Role |
+|---|---|---|
+| 1 | `ai/knowledge/examples.md` | Optional — good vs bad code examples |
+
 ## Mission
 Given a repository, produce a structured review report with:
 - Correctness

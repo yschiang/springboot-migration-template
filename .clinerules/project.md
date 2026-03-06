@@ -4,37 +4,31 @@ This file is auto-loaded by Cline on every session.
 
 ## Step 0 — Route to a task
 
-Infer scope from changed files (`git diff --name-only`) or repo directory structure.
-Determine **intent**: default is `review`. Switch to `fix` only when the operator explicitly uses words like "fix", "apply", "implement", or "migrate".
+Select **exactly one** task card. Do not ask the user to choose — pick the best match.
 
-Select **exactly one** task card using the routing table below. Do not ask the user to choose — pick the best match.
-
-| Priority | Scope signal | Task card | Default Role |
+| Priority | Signal | Task card | Role |
 |---|---|---|---|
-| 1a | `src/`, `pom.xml`, `build.gradle` + review (or default) | `tasks/spring_boot_2_to_3_review.md` | `reviewer` |
-| 1b | `src/`, `pom.xml`, `build.gradle` + fix/apply | `tasks/spring_boot_2_to_3_fix.md` | `submitter` |
-| 2 | `k8s/`, `deploy/`, `charts/`, `helm/`, `*ingress*.yaml` | `tasks/deployment_yaml_ci_review.md` | `ops` |
-| 3 | anything else | `tasks/common_reviewer.md` | `reviewer` |
+| 0 | Operator names a task directly (e.g. "run spring_boot_2_to_3_review") | named task | as declared |
+| 1a | Operator mentions migration/upgrade/2→3/sb3/Boot 3 keywords + review (or default) | `tasks/spring_boot_2_to_3_review.md` | `reviewer` |
+| 1b | Same keywords + fix/apply/implement | `tasks/spring_boot_2_to_3_fix.md` | `submitter` |
+| 2 | `k8s/`, `deploy/`, `charts/`, `helm/`, `*ingress*.yaml` exist in repo | `tasks/deployment_yaml_ci_review.md` | `ops` |
+| 3 | default | `tasks/common_reviewer.md` | `reviewer` |
 
-- If multiple routes match, pick the **highest priority** (lowest number).
-- If unclear: infer from repo conventions; proceed with lowest-risk option (prefer `tasks/common_reviewer.md`).
+- Priority 0 wins unconditionally. Otherwise pick highest priority (lowest number).
+- If unclear: default to `tasks/common_reviewer.md`.
 
-## Step 1 — Load SkillRefs
+## Step 1 — Load
 
-Parse the selected task card's `SkillRefs:` line as a **comma-separated list of file paths**.
-SkillRefs are **REQUIRED, not optional**. Read every file listed before executing.
+1. Read every file in the task card's `## Full Load Order` table, in order.
+2. For each skill entry, also read every file in its `## Dependencies` table.
+3. Read every file in `ai/clinerules/` (behavioral rules — always loaded).
 
-## Step 2 — Load behavioral rules
+## Step 2 — Execute
 
-Read every file in `ai/clinerules/`. These are always-on constraints.
-
-## Step 3 — Execute
-
-1. Read every file listed in the task card's **Scope**.
-2. Run **Checks** using the procedure defined in SkillRefs.
-3. Produce output per the template referenced in the task card's **DoD**.
-4. Do NOT modify files unless Role is `submitter`.
-5. If Role is `reviewer` or `ops`: stop after producing the report.
+1. Scan the target repo as directed by the skill procedure. Default target: repo root (`.`). Operator may narrow scope in their prompt.
+2. Produce output per the task card's **DoD**.
+3. Do NOT modify files unless Role is `submitter`.
+4. If Role is `reviewer` or `ops`: stop after producing the report.
 
 ## Constraints
 

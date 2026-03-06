@@ -6,24 +6,23 @@ Apply fixes to a Spring Boot 2.x codebase to make it compatible with Spring Boot
 Work from the findings in a review report produced by `ai/skills/springboot_migration/SKILL.md`.
 Do not invent new findings — fix only what the report identified.
 
-## Composition
+## Dependencies
 
-You MUST incorporate:
-- `ai/skills/springboot_engineer/SKILL.md` — base engineer role, constraints, output quality bar
-- Load relevant references from `ai/skills/springboot_engineer/references/` based on what you touch:
-  - Fixing security config → load `references/security.md`
-  - Fixing data/JPA → load `references/data.md`
-  - Fixing controllers/web → load `references/web.md`
-  - Writing/fixing tests → load `references/testing.md`
+Load these files IN ORDER before executing:
 
-## Knowledge Base (must use)
+| # | File | Role |
+|---|---|---|
+| 1 | `ai/skills/springboot_engineer/SKILL.md` | Composed module — base engineer role, constraints |
+| 2 | `ai/knowledge/spring-boot-3.0-migration-guide.md` | Knowledge [P0] — official, authoritative |
+| 3 | `ai/knowledge/baeldung-spring-boot-3-migration.md` | Knowledge [P1] — supplementary examples |
 
-Read in priority order. P0 precedes P1 in all reasoning.
+Additionally, load references from `ai/skills/springboot_engineer/references/` based on what you touch:
+- Fixing security config → load `references/security.md`
+- Fixing data/JPA → load `references/data.md`
+- Fixing controllers/web → load `references/web.md`
+- Writing/fixing tests → load `references/testing.md`
 
-- **[P0] Spring Boot 3.0 Migration Guide (official — authoritative):**
-  ai/knowledge/spring-boot-3.0-migration-guide.md
-- **[P1] Baeldung migration guide (supplementary — practical examples):**
-  ai/knowledge/baeldung-spring-boot-3-migration.md
+P0 precedes P1 in all reasoning.
 
 ## Fix Constraints
 

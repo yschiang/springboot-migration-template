@@ -6,15 +6,18 @@ Produce **one merged review report** that:
 - Adds **Spring Boot 2 → 3 migration** specific checks
 - Outputs **one unified report** (no duplicate sections)
 
-## Composition
-You MUST incorporate:
-- `ai/skills/springboot_reviewer/SKILL.md`
-- `ai/skills/springboot_migration/checks.md`
+## Dependencies
 
-## Knowledge Base (must use)
-Read in priority order. P0 precedes P1 in all reasoning and conflict resolution.
-- **[P0]** `ai/knowledge/spring-boot-3.0-migration-guide.md` — official, authoritative
-- **[P1]** `ai/knowledge/baeldung-spring-boot-3-migration.md` — supplementary, practical examples
+Load these files IN ORDER before executing:
+
+| # | File | Role |
+|---|---|---|
+| 1 | `ai/skills/springboot_reviewer/SKILL.md` | Composed module — generic review baseline |
+| 2 | `ai/skills/springboot_migration/checks.md` | Composed module — SB2→3 migration checklist |
+| 3 | `ai/knowledge/spring-boot-3.0-migration-guide.md` | Knowledge [P0] — official, authoritative |
+| 4 | `ai/knowledge/baeldung-spring-boot-3-migration.md` | Knowledge [P1] — supplementary examples |
+
+P0 precedes P1 in all reasoning and conflict resolution.
 
 ### Known Conflicts Between Knowledge Sources
 When the two sources disagree, apply these rules:
