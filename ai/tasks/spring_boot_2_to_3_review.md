@@ -20,4 +20,5 @@
 ## DoD
 
 - Write report to `review-report-<repo>-<YYYYMMDD>-zh.md` (Traditional Chinese) using `ai/templates/review_report_template.md` as format
+- Write scanned files log to `review-scanned-<repo>-<YYYYMMDD>.md` with directory tree and all files read during review
 - Clear GO/GO-with-fixes/NO-GO verdict
