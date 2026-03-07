@@ -6,7 +6,7 @@
             .clinerules/project.md          (auto-loaded by Cline)
                     |
                     v
-            routing table (inline)          (scope → task card)
+            routing table (inline)          (intent → task card)
                     |
                     v
            ai/tasks/<card>.md               (WHAT: Role, Goal, Full Load Order, DoD)
@@ -15,9 +15,9 @@
             |               |
             v               v
    ai/skills/...    ai/clinerules/*         (HOW + behavioral rules)
-            |
-            v
-   ai/templates/*                           (output format per task type)
+       |        \
+       v         v
+ ai/knowledge/*  ai/templates/*            (reference docs + output format)
 ```
 
 ## SSOT — What Belongs Where

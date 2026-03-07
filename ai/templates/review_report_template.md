@@ -26,6 +26,8 @@
 | **Boot Version**   | `<detected version or unknown>`  |
 | **Java Target**    | `<detected>`                     |
 | **Web**            | `<Servlet \| Reactive \| None>`  |
+| **Reviewed**       | `<YYYY-MM-DD HH:MM>` → `<HH:MM>` (`<N>` min) |
+| **Files Scanned**  | `<N>` (`<X>` Java, `<Y>` config, `<Z>` build) |
 | **Recommendation** | **`<GO \| GO-with-fixes \| NO-GO>`** |
 
 ### Summary
