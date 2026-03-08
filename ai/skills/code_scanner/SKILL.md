@@ -58,6 +58,8 @@ Example: `antMatchers("/owners/")` exhibits two issues — (1) `antMatchers` rem
 2. **File coverage:** For each finding, re-run the relevant grep and confirm the **Where** section lists every matching file. Add any missing files.
 3. **Severity verification:** For each finding, look up the item in the severity rubric. If the rubric explicitly lists it, verify the finding uses the rubric's severity.
 4. **No orphan matches:** Review all grep results. If any matched file is not referenced in any finding, either add it to the correct finding or explain why it's excluded.
+5. **Secondary verification:** For each Critical finding based on grep patterns, read at least one matched file to confirm the match is genuine (not in a comment, not a false positive in a test assertion). If a match is a false positive, remove it from the finding's Where section.
+6. **Coverage tracker:** Record a checklist of all check sections (e.g., §1–§8), marking each as: `[x]` finding created, `[-]` N/A recorded, or `[ ]` not checked. All sections must be `[x]` or `[-]` before the report is finalized. If any section is `[ ]`, go back and run the relevant searches.
 
 ## Knowledge Cross-Reference Pattern
 

@@ -62,17 +62,31 @@
 | `@EnableBatchProcessing` | Warn | Remove if relying on Boot autoconfiguration |
 | `@ConstructorBinding` (at type level, not constructor) | Warn | Move to constructor parameter in Boot 3 |
 
-#### Trailing-slash routes
-| Grep pattern | Severity | What it finds |
+#### Trailing-slash matching default change
+
+Spring Boot 3 changed `spring.mvc.pathmatch.trailing-slash` from `true` to `false`.
+Routes mapped with a trailing slash (e.g., `/foo/`) no longer match requests to `/foo`, and vice versa.
+
+**A. Explicit trailing slashes in code** (Critical)
+
+| Grep pattern | Target | What it finds |
 |---|---|---|
-| `Mapping.*/$` in `*.java` | Critical | Route mappings with trailing slash |
-| `(antMatchers\|mvcMatchers\|requestMatchers)` piped through `/$` | Critical | Security matchers with trailing slash |
+| `Mapping.*/"` | `*.java` | Route annotations with trailing-slash paths (e.g., `@GetMapping("/users/")`) |
+| `antMatchers.*/"` | `*.java` | Security matchers with trailing-slash paths |
+| `mvcMatchers.*/"` | `*.java` | Security matchers with trailing-slash paths |
+| `requestMatchers.*/"` | `*.java` | Security matchers with trailing-slash paths |
+
+Run each pattern separately with your built-in search tool against `**/src/**/*.java`.
+
+**B. Missing trailing-slash configuration** (Warn)
+
+Search config files (`*.properties`, `*.yml`) for `trailing-slash`.
+If NOT found AND the repo has `@RestController` or `@Controller` classes:
+→ Warn finding recommending explicit `spring.mvc.pathmatch.trailing-slash=true` or a URL audit of all endpoints and their callers.
+
+**Verification:** For each trailing-slash grep match, read the matched file to confirm it is a real mapping path (not a comment, not a test assertion string).
 
 > **Separation rule:** Trailing-slash route findings are ALWAYS a separate finding from `antMatchers`/`mvcMatchers` API removal, even when the same line of code exhibits both issues. They have different root causes (API removal vs URL matching default change) and different fix strategies.
-
-> **Shell safety:** These patterns avoid literal `"` in regex. Do NOT combine with other patterns in a double-quoted shell argument — the `"` quoting will break.
-
-Use your built-in search tool with these patterns against `*.java` files under `src/`.
 
 ### 5) Config/property changes
 
