@@ -3,23 +3,25 @@
 ## Pipeline Diagram
 
 ```
-            .clinerules/project.md          (auto-loaded by Cline)
+         .clinerules/project.md             (auto-loaded by Cline)
                     |
                     v
-            routing table (inline)          (intent → task card)
+         routing table (inline)             (intent → task card)
                     |
                     v
-           ai/tasks/<card>.md               (WHAT: Role, Goal, Full Load Order, DoD)
+         ai/tasks/<card>.md                 (WHAT: Role, Goal, DoD)
                     |
-            +-------+-------+
-            |               |
-            v               v
-   ai/skills/...    ai/clinerules/*         (HOW + behavioral rules)
-       |    |   \
-       |    v    v
-       | ai/knowledge/*  ai/templates/*    (reference docs + output format)
-       v
-   ai/tools/*                              (deterministic scripts called by skills)
+          +---------+---------+
+          |                   |
+          v                   v
+   ai/clinerules/*      ai/skills/...       (behavioral rules + HOW)
+   (enforce)            (common + specialized)
+                              |
+                    +---------+---------+
+                    |         |         |
+                    v         v         v
+             ai/knowledge/*  ai/tools/*  ai/templates/*
+             (reference)     (scripts)   (output format)
 ```
 
 ## SSOT — What Belongs Where
@@ -128,13 +130,52 @@ Task Card (spring_boot_2_to_3_review.md)
        └─ Knowledge: severity_rubric.md
 ```
 
-### 2-Pass Process
-| Pass | Action | Output |
-|------|--------|--------|
-| **Pass 1 — Discovery** | `scan_scope.py` enumerates files, detects build profile, runs all pattern scans | `review-scanned-<repo>-<YYYYMMDD>.md` |
-| *(operator gate)* | Operator confirms/adjusts scope | — |
-| **Pass 2 — Review** | Agent reads scan results, creates findings, runs baseline checks | `review-report-<repo>-<YYYYMMDD>-zh.md` |
-| *(validation)* | `validate_report.py` checks report structure | pass / fail with errors |
+### 2-Pass Flow
+```
+  ┌──────────────────────────────────────────────────────────┐
+  │  Pass 1 — Discovery (deterministic)                      │
+  │                                                          │
+  │  python ai/tools/scan_scope.py <target> -o scanned.md   │
+  │       │                                                  │
+  │       ├─ Enumerate files (scope config is in script)     │
+  │       ├─ Parse pom.xml / build.gradle (Build Profile)    │
+  │       ├─ Detect dependencies (Technology Signals)        │
+  │       ├─ Run ALL checks.md §4–§8 patterns (with lines)  │
+  │       ├─ Pre-fill Coverage Tracker (§1–§8)               │
+  │       └─ Write scanned manifest                          │
+  │                                                          │
+  │  Output: review-scanned-<repo>-<YYYYMMDD>.md             │
+  └──────────────────────┬───────────────────────────────────┘
+                         │
+                    Operator gate
+                  (confirm / adjust)
+                         │
+  ┌──────────────────────▼───────────────────────────────────┐
+  │  Pass 2 — Review (AI agent)                              │
+  │                                                          │
+  │  1. Read scanned manifest                                │
+  │     └─ Build Profile, Technology Signals, Pattern Scan   │
+  │  2. Create findings from scan results                    │
+  │     └─ Every signal/pattern → finding or explicit N/A    │
+  │  3. Run baseline checks (code quality)                   │
+  │  4. Completeness Self-Check (D1–D6)                      │
+  │  5. Write report per template                            │
+  │                                                          │
+  │  Output: review-report-<repo>-<YYYYMMDD>-zh.md           │
+  └──────────────────────┬───────────────────────────────────┘
+                         │
+  ┌──────────────────────▼───────────────────────────────────┐
+  │  Validation (deterministic)                              │
+  │                                                          │
+  │  python ai/tools/validate_report.py report.md            │
+  │       --scanned scanned.md                               │
+  │                                                          │
+  │  Checks: sections, overview fields, finding format,      │
+  │          severity groups, file count cross-check          │
+  │                                                          │
+  │  Result: PASS or FAIL with specific errors               │
+  └──────────────────────────────────────────────────────────┘
+```
 
 ### Tools
 
