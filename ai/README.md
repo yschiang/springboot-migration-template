@@ -106,6 +106,57 @@ Review modules/user-service/ for Spring Boot 2→3 migration issues.
 
 Role enums: `reviewer` (read-only) / `submitter` (apply fixes) / `ops` (infra review)
 
+## Migration Reviewer — Tool Spec
+
+### What it does
+Automated code review tool that identifies all blockers preventing a Spring Boot 2.x app from running on Spring Boot 3.x. Produces a structured, actionable report in one pass (scan + review).
+
+### Architecture
+```
+Task Card (spring_boot_2_to_3_review.md)
+  └─ Skill: springboot_migration/SKILL.md (2-pass reviewer)
+       ├─ Composed: code_scanner/SKILL.md      (scan discipline + methodology)
+       ├─ Composed: springboot_reviewer/SKILL.md (baseline code quality)
+       ├─ Composed: springboot_migration/checks.md (8-section pattern registry)
+       ├─ Knowledge: spring-boot-3.0-migration-guide.md [P0]
+       ├─ Knowledge: baeldung-spring-boot-3-migration.md [P1]
+       └─ Knowledge: severity_rubric.md
+```
+
+### 2-Pass Process
+| Pass | Action | Output |
+|------|--------|--------|
+| **Pass 1 — Discovery** | Enumerate files, build manifest | `review-scanned-<repo>-<YYYYMMDD>.md` |
+| *(operator gate)* | Operator confirms/adjusts scope | — |
+| **Pass 2 — Review** | Run pattern registry + baseline checks against manifest | `review-report-<repo>-<YYYYMMDD>-zh.md` |
+
+### Key Constraints
+- **Read-only** — does not modify source files
+- **Built-in tools only** — all actions (search, read, write, count) use the AI tool's built-in capabilities; no shell scripts, no `wc -l`, no `grep` piping
+- **Cross-platform** — forward slashes for all paths in output, no OS-specific commands in scanning logic
+- **Pattern-driven** — every check comes from `checks.md` §1–§8 or knowledge source cross-reference; no ad-hoc checks without traceability
+
+### Discipline Rules (from code_scanner)
+| Rule | Summary |
+|------|---------|
+| D1 | Every pattern match → a finding (no silent skips) |
+| D2 | Exhaustive file listing in every finding's Where section |
+| D3 | Severity from rubric, not reviewer judgment |
+| D4 | One finding per distinct root cause |
+
+### Severity Levels
+| Level | Meaning | Gate |
+|-------|---------|------|
+| Critical | Migration blocker or guaranteed runtime/build break | NO-GO |
+| Warn | Behavior change risk needing validation | GO-with-fixes |
+| Suggestion | Quality improvement while touching code | GO |
+
+### Output Artifacts
+| File | Content |
+|------|---------|
+| `review-scanned-*.md` | Directory tree + files read table (annotated with finding IDs after Pass 2) |
+| `review-report-*-zh.md` | Full review report: findings, priority plan, verification checklist |
+
 ## Adding a New Task Card
 
 1. Copy `tasks/_TEMPLATE.md`
@@ -149,6 +200,8 @@ ai/
 │   ├── common_reviewer.md
 │   └── deployment_yaml_ci_review.md
 ├── skills/                   <- detailed checklists and procedures
+│   ├── code_scanner/
+│   │   └── SKILL.md          # generic scan discipline & methodology (composed)
 │   ├── springboot_reviewer/
 │   │   └── SKILL.md          # baseline code review
 │   ├── springboot_engineer/
@@ -176,5 +229,6 @@ ai/
 │   ├── coding-style.md
 │   └── security.md
 └── templates/
-    └── review_report_template.md
+    ├── review_report_template.md
+    └── review_scanned_template.md
 ```
