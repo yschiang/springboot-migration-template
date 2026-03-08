@@ -35,7 +35,7 @@ When the two sources disagree, apply these rules:
 
 ### Pass 1 — Discovery
 
-Follow the scan scope rules from `code_scanner/SKILL.md`.
+Follow the scan scope and search execution rules from `code_scanner/SKILL.md`.
 
 #### Output contract
 
