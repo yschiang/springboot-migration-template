@@ -24,13 +24,15 @@ Examples:
 - Java < 17 when targeting Spring Boot 3
 - `javax.*` imports or `javax.*` artifacts on classpath when migrating to Jakarta
   - Each `javax.*` sub-namespace (`persistence`, `validation`, `xml.bind`, `annotation`, `servlet`) is a **separate** Critical finding
-- Removed APIs still used (e.g., `WebSecurityConfigurerAdapter`, `antMatchers()`, `mvcMatchers()`)
+- Removed APIs still used (e.g., `WebSecurityConfigurerAdapter`, `antMatchers()`, `mvcMatchers()`, `authorizeRequests()`)
 - Build fails / tests fail due to version mismatch
 - **Dependency coordinate changes that break resolution in Boot 3 BOM**:
   - `mysql:mysql-connector-java` → `com.mysql:mysql-connector-j`
   - `org.hibernate:hibernate-core` → `org.hibernate.orm:hibernate-core`
   - Springfox (any version) — incompatible with Spring MVC 6
 - Removed property keys: `spring.jpa.hibernate.use-new-id-generator-mappings`
+- Hibernate 6 removed dialect classes (`MySQL5Dialect`, `MySQL5InnoDBDialect`, `H2Dialect`, etc.)
+- `@LocalServerPort` package relocation (`boot.web.server` → `boot.test.web.server`)
 - Trailing-slash route matching disabled by default in SB3: routes mapped to `/foo/` return
   HTTP 404 for `/foo`, and security matchers on `/foo/` stop protecting `/foo` requests
 

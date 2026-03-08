@@ -15,9 +15,11 @@
             |               |
             v               v
    ai/skills/...    ai/clinerules/*         (HOW + behavioral rules)
-       |        \
-       v         v
- ai/knowledge/*  ai/templates/*            (reference docs + output format)
+       |    |   \
+       |    v    v
+       | ai/knowledge/*  ai/templates/*    (reference docs + output format)
+       v
+   ai/tools/*                              (deterministic scripts called by skills)
 ```
 
 ## SSOT — What Belongs Where
@@ -27,6 +29,7 @@
 | Entry router | `.clinerules/project.md` | Routing table, intent detection, load sequence (Full Load Order) |
 | Task cards | `ai/tasks/*` | WHAT: Role, Goal, Constraints, Full Load Order, DoD |
 | Skills | `ai/skills/*` | HOW: detailed procedures, merge rules, composition |
+| Tools | `ai/tools/*` | Deterministic scripts (scan scope SSOT, report validation) |
 | Knowledge | `ai/knowledge/*` | Reference docs (migration guides, rubrics, examples) |
 | Behavioral rules | `ai/clinerules/*` | Always-on constraints (evidence, severity, scope, minimal diff) |
 | Templates | `ai/templates/*` | Output format per task type (SSOT for report structure) |
@@ -109,13 +112,15 @@ Role enums: `reviewer` (read-only) / `submitter` (apply fixes) / `ops` (infra re
 ## Migration Reviewer — Tool Spec
 
 ### What it does
-Automated code review tool that identifies all blockers preventing a Spring Boot 2.x app from running on Spring Boot 3.x. Produces a structured, actionable report in one pass (scan + review).
+Automated code review tool that identifies all blockers preventing a Spring Boot 2.x app from running on Spring Boot 3.x. Produces a structured, actionable report.
 
 ### Architecture
 ```
 Task Card (spring_boot_2_to_3_review.md)
   └─ Skill: springboot_migration/SKILL.md (2-pass reviewer)
-       ├─ Composed: code_scanner/SKILL.md      (scan discipline + methodology)
+       ├─ Tool: ai/tools/scan_scope.py         (deterministic Pass 1 scanner)
+       ├─ Tool: ai/tools/validate_report.py     (report structure validator)
+       ├─ Composed: code_scanner/SKILL.md       (scan discipline + methodology)
        ├─ Composed: springboot_reviewer/SKILL.md (baseline code quality)
        ├─ Composed: springboot_migration/checks.md (8-section pattern registry)
        ├─ Knowledge: spring-boot-3.0-migration-guide.md [P0]
@@ -126,23 +131,66 @@ Task Card (spring_boot_2_to_3_review.md)
 ### 2-Pass Process
 | Pass | Action | Output |
 |------|--------|--------|
-| **Pass 1 — Discovery** | Enumerate files, build manifest | `review-scanned-<repo>-<YYYYMMDD>.md` |
+| **Pass 1 — Discovery** | `scan_scope.py` enumerates files, detects build profile, runs all pattern scans | `review-scanned-<repo>-<YYYYMMDD>.md` |
 | *(operator gate)* | Operator confirms/adjusts scope | — |
-| **Pass 2 — Review** | Run pattern registry + baseline checks against manifest | `review-report-<repo>-<YYYYMMDD>-zh.md` |
+| **Pass 2 — Review** | Agent reads scan results, creates findings, runs baseline checks | `review-report-<repo>-<YYYYMMDD>-zh.md` |
+| *(validation)* | `validate_report.py` checks report structure | pass / fail with errors |
+
+### Tools
+
+#### `ai/tools/scan_scope.py` — Pass 1 Scope Scanner
+Deterministic Python tool that replaces manual file enumeration. All agents get identical results.
+
+```bash
+python ai/tools/scan_scope.py <target_dir> -o review-scanned-<repo>-<YYYYMMDD>.md
+```
+
+Produces:
+| Section | Content |
+|---------|---------|
+| **Build Profile** | Spring Boot version, Java version, build tool, parent POM, packaging |
+| **Technology Signals** | Migration-relevant dependencies with versions |
+| **Pattern Scan Results** | All checks.md §4/§5/§6/§8 grep patterns with match counts, files, and line numbers |
+| **Coverage Tracker** | Pre-filled §1–§8 checklist for Pass 2 agent |
+| **Module Structure** | File counts by module and type |
+| **Directory Tree** | Collapsed annotated tree |
+| **Scope Verification** | Glob pattern counts |
+| **Files** | Full file table (≤ 100 files only) |
+
+Pattern coverage includes:
+- **Jakarta namespace:** `javax.persistence`, `javax.validation`, `javax.servlet`, `javax.xml.bind`, `javax.annotation`
+- **Security 6:** `WebSecurityConfigurerAdapter`, `antMatchers`, `mvcMatchers`, `authorizeRequests`, `csrf()`/`cors()` method chains
+- **Hibernate 6:** dialect class removals (`MySQL5Dialect`, `H2Dialect`, etc.), `GenerationType.AUTO` silent break
+- **Spring Batch 5:** `JobBuilderFactory`, `StepBuilderFactory`
+- **HttpClient 5:** `org.apache.http` namespace, `setConnectTimeout`/`setReadTimeout`
+- **Springfox:** `@EnableSwagger2`, `@EnableOpenApi`
+- **Config:** deprecated property keys, trailing-slash config absence
+- **Test:** `@LocalServerPort` package relocation
+
+#### `ai/tools/validate_report.py` — Report Validator
+Checks a review report against the template structure.
+
+```bash
+python ai/tools/validate_report.py <report.md> --scanned <scanned.md>
+```
+
+Validates: required sections, overview fields, finding header format (`[SEVERITY][SOURCE] ID — title`), finding sub-sections, severity grouping, priority plan levels, file count cross-check.
 
 ### Key Constraints
 - **Read-only** — does not modify source files
-- **Built-in tools only** — all actions (search, read, write, count) use the AI tool's built-in capabilities; no shell scripts, no `wc -l`, no `grep` piping
-- **Cross-platform** — forward slashes for all paths in output, no OS-specific commands in scanning logic
-- **Pattern-driven** — every check comes from `checks.md` §1–§8 or knowledge source cross-reference; no ad-hoc checks without traceability
+- **Deterministic scanning** — Pass 1 uses `scan_scope.py` (SSOT for scope config); agents do not re-derive scope
+- **Pattern-driven** — every check comes from `checks.md` §1–§8 or knowledge source cross-reference; no ad-hoc checks
+- **No script generation** — agents must not generate scripts; pre-written tools in `ai/tools/` are the exception
 
 ### Discipline Rules (from code_scanner)
 | Rule | Summary |
 |------|---------|
 | D1 | Every pattern match → a finding (no silent skips) |
-| D2 | Exhaustive file listing in every finding's Where section |
+| D2 | Exhaustive file listing with full paths — no abbreviations |
 | D3 | Severity from rubric, not reviewer judgment |
 | D4 | One finding per distinct root cause |
+| D5 | Secondary verification — read matched files to confirm genuine matches |
+| D6 | Coverage tracker — all §1–§8 must be `[x]` or `[-]` before report finalization |
 
 ### Severity Levels
 | Level | Meaning | Gate |
@@ -154,8 +202,8 @@ Task Card (spring_boot_2_to_3_review.md)
 ### Output Artifacts
 | File | Content |
 |------|---------|
-| `review-scanned-*.md` | Module structure + scope verification (+ full file table if ≤ 100 files) |
-| `review-report-*-zh.md` | Full review report: findings, priority plan, verification checklist |
+| `review-scanned-*.md` | Build profile, technology signals, pattern scan results, coverage tracker, module structure, directory tree, scope verification (+ full file table if ≤ 100 files) |
+| `review-report-*-zh.md` | Full review report: findings with full paths, priority plan, verification checklist |
 
 ## Adding a New Task Card
 
@@ -217,8 +265,9 @@ ai/
 │   ├── springboot_security/SKILL.md
 │   ├── springboot_tdd/SKILL.md
 │   └── springboot_verification/SKILL.md
-├── tools/                    <- reusable scripts for all agents
-│   └── scan_scope.py         # Pass 1 scope scanner (deterministic)
+├── tools/                    <- deterministic scripts for all agents
+│   ├── scan_scope.py         # Pass 1 scope scanner (SSOT for scan config)
+│   └── validate_report.py    # Report structure validator
 ├── knowledge/                <- reference docs
 ├── clinerules/               <- behavioral rules (always loaded)
 │   ├── 01_read_before_write.md
@@ -228,6 +277,7 @@ ai/
 │   ├── 05_minimal_diff.md
 │   ├── 06_spring_migration_focus.md
 │   ├── 07_one_output.md
+│   ├── 08_builtin_tools_first.md
 │   ├── coding-style.md
 │   └── security.md
 └── templates/

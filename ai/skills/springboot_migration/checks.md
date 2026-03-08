@@ -67,7 +67,14 @@ Every grep pattern listed in a table below is a **mandatory search**.
 | `setConnectTimeout\|setReadTimeout` (in HttpComponentsClientHttpRequestFactory context) | Critical | Removed timeout setters in HC5 |
 | `WebSecurityConfigurerAdapter` | Critical | Removed in Security 6 |
 | `antMatchers\(` / `mvcMatchers\(` | Critical | Removed in Security 6, use `requestMatchers()` |
+| `authorizeRequests\(` | Critical | Removed in Security 6.1, use `authorizeHttpRequests()` |
+| `.csrf()` / `.cors()` (method chain, no lambda) | Warn | Deprecated in Security 6, use lambda DSL: `csrf(c -> c.disable())` |
 | `@EnableSwagger2\|@EnableOpenApi\|springfox` | Critical | Springfox incompatible with Boot 3 |
+| `MySQL5Dialect\|MySQL5InnoDBDialect\|MySQL8Dialect` | Critical | Hibernate 6 removed legacy dialect classes |
+| `PostgreSQL95Dialect\|H2Dialect\|Oracle12cDialect\|SQLServerDialect` | Critical | Hibernate 6 removed legacy dialect classes |
+| `GenerationType.AUTO` | Warn | Hibernate 6 changed AUTO from IDENTITY to SEQUENCE for MySQL — silent behavior change |
+| `org.springframework.boot.web.server.LocalServerPort` | Critical | Relocated to `boot.test.web.server` in Boot 3 |
+| `setConnectTimeout\|setReadTimeout` (in HttpComponentsClientHttpRequestFactory) | Critical | Removed timeout setters in HC5 adapter |
 | `@EnableBatchProcessing` | Warn | Remove if relying on Boot autoconfiguration |
 | `@ConstructorBinding` (at type level, not constructor) | Warn | Move to constructor parameter in Boot 3 |
 
@@ -107,6 +114,7 @@ If NOT found AND the repo has `@RestController` or `@Controller` classes:
 | `server.max.http.header.size` | `server.max-http-request-header-size` | Warn |
 | `management.metrics.export.<product>.*` | `management.<product>.metrics.export.*` | Warn |
 | `spring.security.saml2.relyingparty.registration.{id}.identity-provider` | Removed — use `asserting-party` | Critical |
+| `spring.jpa.database-platform` or `hibernate.dialect` with removed dialect class | Use Hibernate 6 auto-detection or new dialect names | Critical |
 
 Tip: add `spring-boot-properties-migrator` dependency to auto-detect at runtime.
 

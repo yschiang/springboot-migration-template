@@ -78,12 +78,34 @@ SCAN_PATTERNS_JAVA = [
     ("§4", "javax.annotation.PreDestroy", "Critical", "javax.annotation lifecycle (PreDestroy)"),
     # Other code-level breaks
     ("§4", "org.apache.http.", "Critical", "Apache HttpClient 4.x namespace"),
+    ("§4", "setConnectTimeout", "Critical", "setConnectTimeout (removed in HC5 RequestFactory)"),
+    ("§4", "setReadTimeout", "Critical", "setReadTimeout (removed in HC5 RequestFactory)"),
+    # Security 6 removals
     ("§4", "WebSecurityConfigurerAdapter", "Critical", "WebSecurityConfigurerAdapter (removed in Security 6)"),
     ("§4", "antMatchers(", "Critical", "antMatchers (removed in Security 6)"),
     ("§4", "mvcMatchers(", "Critical", "mvcMatchers (removed in Security 6)"),
+    ("§4", "authorizeRequests(", "Critical", "authorizeRequests() (removed in Security 6, use authorizeHttpRequests())"),
+    # Security 6 DSL migration (method chain → lambda)
+    ("§4", ".csrf()", "Warn", "csrf() method chain (migrate to lambda style in Security 6)"),
+    ("§4", ".cors()", "Warn", "cors() method chain (migrate to lambda style in Security 6)"),
+    # Springfox
     ("§4", "@EnableSwagger2", "Critical", "Springfox @EnableSwagger2"),
     ("§4", "@EnableOpenApi", "Critical", "Springfox @EnableOpenApi"),
     ("§4", "springfox", "Critical", "Springfox usage"),
+    # Hibernate 6 — dialect class removals
+    ("§4", "MySQL5Dialect", "Critical", "MySQL5Dialect (removed in Hibernate 6)"),
+    ("§4", "MySQL5InnoDBDialect", "Critical", "MySQL5InnoDBDialect (removed in Hibernate 6)"),
+    ("§4", "MySQL8Dialect", "Critical", "MySQL8Dialect (removed in Hibernate 6)"),
+    ("§4", "MariaDB106Dialect", "Critical", "MariaDB106Dialect (removed in Hibernate 6)"),
+    ("§4", "PostgreSQL95Dialect", "Critical", "PostgreSQL95Dialect (removed in Hibernate 6)"),
+    ("§4", "H2Dialect", "Critical", "H2Dialect (removed in Hibernate 6)"),
+    ("§4", "Oracle12cDialect", "Critical", "Oracle12cDialect (removed in Hibernate 6)"),
+    ("§4", "SQLServerDialect", "Critical", "SQLServerDialect (removed in Hibernate 6)"),
+    # Hibernate 6 — silent behavior change
+    ("§4", "GenerationType.AUTO", "Warn", "GenerationType.AUTO (Hibernate 6 changed to SEQUENCE for MySQL — silent break)"),
+    # Test package relocations
+    ("§4", "org.springframework.boot.web.server.LocalServerPort", "Critical", "@LocalServerPort old package (relocated to boot.test.web.server)"),
+    # Other
     ("§4", "@EnableBatchProcessing", "Warn", "@EnableBatchProcessing"),
     ("§4", "@ConstructorBinding", "Warn", "@ConstructorBinding (may need relocation)"),
     # Trailing-slash patterns
@@ -110,6 +132,14 @@ SCAN_PATTERNS_CONFIG = [
     ("§5", "server.max.http.header.size", "Warn", "server.max.http.header.size (renamed)"),
     ("§5", "management.metrics.export", "Warn", "management.metrics.export.* (path changed)"),
     ("§5", "identity-provider", "Critical", "SAML2 identity-provider (removed, use asserting-party)"),
+    # Hibernate dialect in config (removed in Hibernate 6)
+    ("§5", "MySQL5Dialect", "Critical", "Hibernate MySQL5Dialect in config (removed in Hibernate 6)"),
+    ("§5", "MySQL5InnoDBDialect", "Critical", "Hibernate MySQL5InnoDBDialect in config (removed)"),
+    ("§5", "MySQL8Dialect", "Critical", "Hibernate MySQL8Dialect in config (removed in Hibernate 6)"),
+    ("§5", "PostgreSQL95Dialect", "Critical", "Hibernate PostgreSQL95Dialect in config (removed)"),
+    ("§5", "H2Dialect", "Critical", "Hibernate H2Dialect in config (removed in Hibernate 6)"),
+    ("§5", "Oracle12cDialect", "Critical", "Hibernate Oracle12cDialect in config (removed)"),
+    ("§5", "SQLServerDialect", "Critical", "Hibernate SQLServerDialect in config (removed)"),
     # §4 trailing-slash config check
     ("§4", "trailing-slash", "Info", "trailing-slash configuration found"),
     # §8
