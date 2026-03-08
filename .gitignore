@@ -5,3 +5,6 @@ target/
 .claude/
 .tools/
 .vscode/
+
+# Sample repos for testing (clone locally, not tracked)
+samples/
