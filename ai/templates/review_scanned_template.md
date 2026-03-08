@@ -31,9 +31,12 @@ For single-module projects, use one row (repo name as module).
 
 Informational — shows which glob patterns were used. Primary count verification is Module Structure Total = Header Total Files.
 
+<!-- STOP: Check Header Total Files. If > 100, do NOT include this section. -->
+
 ## Files
 
-**Only for repos with ≤ 100 files.** For larger repos, omit this section — the Module Structure and Scope Verification tables provide sufficient coverage.
+> **Gate: only include this section if Total Files ≤ 100.**
+> If Total Files > 100, DELETE this entire section from your output. The Module Structure and Scope Verification tables above are sufficient.
 
 | # | File | Type |
 |---|------|------|

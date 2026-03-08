@@ -217,6 +217,8 @@ ai/
 │   ├── springboot_security/SKILL.md
 │   ├── springboot_tdd/SKILL.md
 │   └── springboot_verification/SKILL.md
+├── tools/                    <- reusable scripts for all agents
+│   └── scan_scope.py         # Pass 1 scope scanner (deterministic)
 ├── knowledge/                <- reference docs
 ├── clinerules/               <- behavioral rules (always loaded)
 │   ├── 01_read_before_write.md

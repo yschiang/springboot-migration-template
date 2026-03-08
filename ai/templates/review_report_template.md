@@ -28,6 +28,7 @@
 | **Web**            | `<Servlet \| Reactive \| None>`  |
 | **Reviewed**       | `<YYYY-MM-DD HH:MM>` → `<HH:MM>` (`<N>` min) |
 | **Files Scanned**  | `<N>` (`<X>` Java, `<Y>` config, `<Z>` build) |
+| **Scanned Manifest** | [`review-scanned-<repo>-<YYYYMMDD>.md`](review-scanned-<repo>-<YYYYMMDD>.md) |
 | **Recommendation** | **`<GO \| GO-with-fixes \| NO-GO>`** |
 
 ### Summary

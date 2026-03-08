@@ -51,28 +51,17 @@ The file MUST contain these sections:
 
 For repos with > 100 files, the **Files** section is omitted — Module Structure + Scope Verification provide sufficient coverage for operator confirmation.
 
-Scope:
-- **Include:** `**/src/**` and build files (`**/pom.xml`, `**/build.gradle`, `**/*.kts`)
-- **Exclude:** `.git`, `target`, `build`, `node_modules`, `.vscode`, `ai`, `.tools`, `.claude`
-- **Extensions:** `.java`, `.xml`, `.yml`, `.yaml`, `.properties`, `.gradle`, `.kts`
+Scope is defined in `ai/tools/scan_scope.py` (SSOT). Do not duplicate scope rules here.
 
 #### Steps
 
-> **Do NOT generate scripts** (Python, bash, PowerShell, etc.) to create this file.
-> Use your built-in file tools directly. See `code_scanner/SKILL.md` Rule 2 for rationale.
+Run the scope scanner tool to produce the manifest:
 
-1. **Enumerate** — use your file listing tool (e.g., `list_files`, Glob) to collect **ALL** matching files. Run one glob per pattern and record each count for Scope Verification.
-   - Single-module: glob `src/**/*.java`, `src/**/*.properties`, etc.
-   - Multi-module (**module-first strategy**):
-     1. Glob `**/pom.xml` (or `**/build.gradle`) to discover all module directories.
-     2. For each module, glob `<module>/src/**/*.java`, `<module>/src/**/*.properties`, etc. and record counts per module.
-     3. This avoids holding thousands of paths at once — count per module, then sum.
-   - **Sanity check:** if you find multiple `pom.xml` files but total files < 50, you likely missed submodule sources. Re-glob with broader patterns.
-2. **Classify** — determine type by extension: `.java` → Java, `.properties`/`.yml`/`.yaml`/`.xml` → Config, `pom.xml`/`.gradle`/`.kts` → Build. Group counts by module (first path segment after target root).
-3. **Write** — write the scanned log:
-   - **Always:** Header table, Module Structure table, Scope Verification table.
-   - **≤ 100 files:** also write a full Files table with every file listed.
-   - **> 100 files:** omit the Files table. Module counts + glob counts are sufficient.
+```
+python ai/tools/scan_scope.py <target_dir> -o review-scanned-<repo>-<YYYYMMDD>.md
+```
+
+This handles enumeration, classification, module detection, tiered output (≤100 / >100), and scope verification in one deterministic step. Read the output file and proceed to the validation gate.
 
 #### Validation gate
 
@@ -91,10 +80,13 @@ After writing the file:
 
 **Gate:** Read `review-scanned-<repo>-<YYYYMMDD>.md`. If it is empty or missing the `## Module Structure` table, STOP — go back and complete Pass 1 first. Never proceed with an empty scanned files log.
 
-1. Read the confirmed scanned files log as the manifest.
+1. **Read the scanned manifest** (`review-scanned-<repo>-<YYYYMMDD>.md`) — it contains:
+   - **Build Profile:** Spring Boot version, Java version, build tool — use these for §1–§2 checks (no need to re-parse build files).
+   - **Technology Signals:** pre-detected migration-relevant dependencies and code patterns — use as a checklist for §3–§4 (every signal listed MUST produce a finding or explicit N/A).
+   - **Module Structure / Files:** defines the scope for all searches.
 2. **Run migration checks** — for each section in `checks.md` §1–§8:
-   a. **§1–§3 (build/deps):** Read `pom.xml` / `build.gradle`. Check Java version, dependency coordinates, Spring Boot version.
-   b. **§4 (code-level):** Run **every grep pattern** from each table as a separate search against `**/src/**/*.java`. One search call per row.
+   a. **§1–§3 (build/deps):** Use Build Profile + Technology Signals from the manifest. Cross-check against `pom.xml` / `build.gradle` only if manifest data is insufficient.
+   b. **§4 (code-level):** Run **every grep pattern** from each table as a separate search against `**/src/**/*.java`. One search call per row. Cross-reference with Technology Signals — if a signal was detected, the grep MUST confirm it.
    c. **§5 (config):** Run every old-key pattern against config files (`*.properties`, `*.yml`).
    d. **§6–§8:** Run the relevant searches described in each section.
    e. Do NOT skip any section. Do NOT rely on memory — run the search tool.
