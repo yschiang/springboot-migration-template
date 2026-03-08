@@ -49,7 +49,7 @@
 #### [CRITICAL] <ID> — <Title>
 
 **Where**
-- File: `<path>`
+- File: `<full/path/from/repo/root>` (no abbreviations — no `...`, no `~`, no partial paths)
 - Symbol/Section: `<class/method/property>` (if applicable)
 
 **Evidence**
@@ -79,7 +79,7 @@
 #### [WARN] <ID> — <Title>
 
 **Where**
-- File: `<path>`
+- File: `<full/path/from/repo/root>` (no abbreviations — no `...`, no `~`, no partial paths)
 - Symbol/Section: `<class/method/property>` (if applicable)
 
 **Evidence**
@@ -109,7 +109,7 @@
 #### [SUGGESTION] <ID> — <Title>
 
 **Where**
-- File: `<path>`
+- File: `<full/path/from/repo/root>` (no abbreviations — no `...`, no `~`, no partial paths)
 - Symbol/Section: `<class/method/property>` (if applicable)
 
 **Evidence**

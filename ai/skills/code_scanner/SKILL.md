@@ -12,7 +12,7 @@ No silent skips. If a pattern produces zero matches, record "N/A — not found i
 
 ### D2 — Exhaustive file listing
 Every finding MUST list **ALL** matching files and line numbers in the **Where** section.
-No sampling, no "e.g.", no "such as", no representative subset.
+No sampling, no "e.g.", no "such as", no representative subset. Use full paths from repo root — no abbreviations (`...`, `~`, partial paths).
 If a grep returns 12 files, all 12 appear.
 If a file has multiple matching lines (e.g., lines 3,4,5), list the first line per file — but if matches span distinct code locations (e.g., import block vs method body), list each location.
 
