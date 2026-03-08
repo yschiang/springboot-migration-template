@@ -19,6 +19,6 @@
 
 ## DoD
 
-- Write report to `review-report-<repo>-<YYYYMMDD>-zh.md` (Traditional Chinese) using `ai/templates/review_report_template.md` as format
-- Write scanned files log to `review-scanned-<repo>-<YYYYMMDD>.md` with directory tree and all files read during review
+- **Pass 1**: Write `review-scanned-<repo>-<YYYYMMDD>.md` with directory tree and file list → STOP and wait for operator confirmation
+- **Pass 2**: Write `review-report-<repo>-<YYYYMMDD>-zh.md` (Traditional Chinese) using `ai/templates/review_report_template.md` → update scanned files log with finding annotations
 - Clear GO/GO-with-fixes/NO-GO verdict

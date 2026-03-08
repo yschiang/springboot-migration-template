@@ -13,19 +13,18 @@ Mark files with findings using: `⚠` (Critical/Warning) or `💡` (Suggestion)
 
 ```
 <repo>/
-├── src/
-│   ├── main/java/com/example/
-│   │   ├── config/
-│   │   │   └── SecurityConfig.java        ⚠ C4, W2
-│   │   ├── controller/
-│   │   │   └── UserController.java        ⚠ C3, W2
-│   │   └── dto/
-│   │       └── CreateUserRequest.java     ⚠ C3
-│   └── test/java/...
-├── pom.xml                                ⚠ C1, C2, C5
-├── src/main/resources/
-│   └── application.yml                    ⚠ W1
-└── ...
+  src/
+    main/java/com/example/
+      config/
+        SecurityConfig.java        ⚠ C4, W2
+      controller/
+        UserController.java        ⚠ C3, W2
+      dto/
+        CreateUserRequest.java     ⚠ C3
+    main/resources/
+      application.yml              ⚠ W1
+    test/java/...
+  pom.xml                          ⚠ C1, C2, C5
 ```
 
 ## Files Read
