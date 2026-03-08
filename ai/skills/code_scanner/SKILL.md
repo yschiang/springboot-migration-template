@@ -31,7 +31,7 @@ Example: `antMatchers("/owners/")` exhibits two issues — (1) `antMatchers` rem
 ### Search execution rules
 
 1. **Use built-in tools for all actions** — file enumeration, searching, reading, writing, and counting. Built-in tools are cross-platform by design. Do NOT shell out for any of these. Use forward slashes (`/`) for all file paths in output, regardless of OS.
-2. **Do NOT generate scripts or shell commands** — never generate shell one-liners, compound commands, piped pipelines, or scripts (bash, Python, PowerShell) for file enumeration, counting, or classification. LLM-generated scripts are prone to token corruption (e.g., `case` pattern ordering bugs, shell quoting issues that cause hangs). Call your built-in tools one at a time. For line counts, use the last line number from your file read tool — do NOT shell out to `wc -l`.
+2. **Do NOT generate scripts or shell commands** — never generate shell one-liners, compound commands, piped pipelines, or scripts (bash, Python, PowerShell) for file enumeration, counting, or classification. LLM-generated scripts are prone to token corruption (e.g., `case` pattern ordering bugs, shell quoting issues that cause hangs). Call your built-in tools one at a time.
 3. **One pattern per search.** Never combine multiple check patterns into a single command. A quoting or regex error in one pattern will hang the entire block.
 4. **Escape regex metacharacters** — e.g., `antMatchers\(` not `antMatchers(`.
 
@@ -39,13 +39,14 @@ Example: `antMatchers("/owners/")` exhibits two issues — (1) `antMatchers` rem
 
 | Target | File filter | Example scope |
 |---|---|---|
-| Java code | `*.java` | `src/` |
-| Config | `*.properties`, `*.yml`, `*.yaml` | `src/main/resources/` |
-| Maven build | `pom.xml` | repo root |
-| Gradle build | `*.gradle`, `*.kts` | repo root |
+| Java code | `*.java` | `**/src/**` |
+| Config | `*.properties`, `*.yml`, `*.yaml` | `**/src/**/resources/` |
+| Maven build | `pom.xml` | `**/pom.xml` |
+| Gradle build | `*.gradle`, `*.kts` | `**/*.gradle`, `**/*.kts` |
 
 ### Scan scope
-- Default: `src/` and build files (`pom.xml`, `build.gradle`, `*.kts`)
+- Default: all `**/src/**` directories and all build files (`**/pom.xml`, `**/build.gradle`, `**/*.kts`)
+- For multi-module projects (parent pom with `<modules>`, or multiple `pom.xml` files): glob `**/src/**/*.java`, `**/src/**/*.properties`, etc. — do NOT assume `src/` is at the target root.
 - Exclude: `target/`, `build/`, `node_modules/`, `.git/`
 - If `examples/` or other subdirectories exist, confirm with operator in Pass 1 whether to include
 

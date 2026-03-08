@@ -154,7 +154,7 @@ Task Card (spring_boot_2_to_3_review.md)
 ### Output Artifacts
 | File | Content |
 |------|---------|
-| `review-scanned-*.md` | Directory tree + files read table (annotated with finding IDs after Pass 2) |
+| `review-scanned-*.md` | Module structure + scope verification (+ full file table if ≤ 100 files) |
 | `review-report-*-zh.md` | Full review report: findings, priority plan, verification checklist |
 
 ## Adding a New Task Card

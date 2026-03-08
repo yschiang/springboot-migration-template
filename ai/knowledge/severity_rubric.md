@@ -44,10 +44,6 @@ Examples:
 - `@ConstructorBinding` at type level (move to constructor)
 - `@EnableBatchProcessing` when Boot autoconfiguration is desired
 
-> **Note:** Trailing-slash route matching disabled by default in SB3 is **Critical**, not Warn.
-> A route mapped to `/foo/` silently returns HTTP 404 for `/foo` requests, and a security
-> `requestMatchers("/foo/")` no longer protects `/foo` — both are guaranteed runtime breaks.
-
 ## Suggestion
 Not required to ship migration, but improves quality/maintainability while touching code.
 Examples:

@@ -1,4 +1,5 @@
 <!-- Template for scanned files log. Referenced by task card DoD. -->
+<!-- Format is tiered by repo size: ≤100 files = full table, >100 files = summary. -->
 
 # Scanned Files — <repo>
 
@@ -6,31 +7,36 @@
 |---|---|
 | **Date** | `<YYYY-MM-DD>` |
 | **Total Files** | `<N>` |
+| **Type Counts** | `Java: <X>, Config: <Y>, Build: <Z>` |
 
-## Directory Structure
+## Module Structure
 
-Mark files with findings using: `⚠` (Critical/Warning) or `💡` (Suggestion)
+| Module | Java | Config | Build | Total |
+|--------|------|--------|-------|-------|
+| `<module-a>` | `<X>` | `<Y>` | `<Z>` | `<N>` |
+| `<module-b>` | `<X>` | `<Y>` | `<Z>` | `<N>` |
+| **Total** | **`<X>`** | **`<Y>`** | **`<Z>`** | **`<N>`** |
 
-```
-<repo>/
-  src/
-    main/java/com/example/
-      config/
-        SecurityConfig.java        ⚠ C4, W2
-      controller/
-        UserController.java        ⚠ C3, W2
-      dto/
-        CreateUserRequest.java     ⚠ C3
-    main/resources/
-      application.yml              ⚠ W1
-    test/java/...
-  pom.xml                          ⚠ C1, C2, C5
-```
+For single-module projects, use one row (repo name as module).
 
-## Files Read
+## Scope Verification
 
-| # | File | Type | Size |
-|---|------|------|------|
-| 1 | `<path>` | `<Java>` | `<N lines>` |
-| 2 | `<path>` | `<Config>` | `<N lines>` |
-| ... | ... | ... | ... |
+| Glob Pattern | Count |
+|---|---|
+| `**/src/**/*.java` | `<N>` |
+| `**/src/**/*.properties` | `<N>` |
+| `**/src/**/*.yml` | `<N>` |
+| `**/src/**/*.xml` | `<N>` |
+| `**/pom.xml` | `<N>` |
+
+Informational — shows which glob patterns were used. Primary count verification is Module Structure Total = Header Total Files.
+
+## Files
+
+**Only for repos with ≤ 100 files.** For larger repos, omit this section — the Module Structure and Scope Verification tables provide sufficient coverage.
+
+| # | File | Type |
+|---|------|------|
+| 1 | `<path>` | Java |
+| 2 | `<path>` | Config |
+| ... | ... | ... |

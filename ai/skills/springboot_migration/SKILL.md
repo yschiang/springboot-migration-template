@@ -40,16 +40,19 @@ Follow the scan scope rules from `code_scanner/SKILL.md`.
 #### Output contract
 
 Write `review-scanned-<repo>-<YYYYMMDD>.md` per `ai/templates/review_scanned_template.md`.
-The file MUST contain these three sections:
+The file MUST contain these sections:
 
-| Section | Required content |
-|---|---|
-| **Header table** | Date, Total Files, Type Counts (`Java`, `Config`, `Build`, …) |
-| **Directory Structure** | Indented list of all scanned files inside a fenced code block |
-| **Files Read** | Numbered table — every scanned file with path, type, and line count |
+| Section | Required | Content |
+|---|---|---|
+| **Header table** | Always | Date, Total Files, Type Counts |
+| **Module Structure** | Always | Table of modules with file counts per type (single-module = one row) |
+| **Scope Verification** | Always | Glob patterns used and their result counts |
+| **Files** | ≤ 100 files only | Numbered table — every scanned file with path and type |
+
+For repos with > 100 files, the **Files** section is omitted — Module Structure + Scope Verification provide sufficient coverage for operator confirmation.
 
 Scope:
-- **Include:** `src/` and build files (`pom.xml`, `build.gradle`, `*.kts`)
+- **Include:** `**/src/**` and build files (`**/pom.xml`, `**/build.gradle`, `**/*.kts`)
 - **Exclude:** `.git`, `target`, `build`, `node_modules`, `.vscode`, `ai`, `.tools`, `.claude`
 - **Extensions:** `.java`, `.xml`, `.yml`, `.yaml`, `.properties`, `.gradle`, `.kts`
 
@@ -58,23 +61,18 @@ Scope:
 > **Do NOT generate scripts** (Python, bash, PowerShell, etc.) to create this file.
 > Use your built-in file tools directly. See `code_scanner/SKILL.md` Rule 2 for rationale.
 
-1. **Enumerate** — use your file listing tool (e.g., `list_files`, Glob) to collect all matching files under `src/` and build files at repo root.
-2. **Count** — tally files by type (`Java`, `Config`, `Build`) for the header table.
-3. **Write** — directly write the markdown file with the header table, an indented file list, and the files-read table. Use 2-space indentation per directory level. Do NOT use `├──`/`└──` connectors.
-
-Indentation example:
-```
-repo-name/
-  src/
-    main/java/com/example/
-      config/
-        SecurityConfig.java
-      model/
-        User.java
-    main/resources/
-      application.properties
-  pom.xml
-```
+1. **Enumerate** — use your file listing tool (e.g., `list_files`, Glob) to collect **ALL** matching files. Run one glob per pattern and record each count for Scope Verification.
+   - Single-module: glob `src/**/*.java`, `src/**/*.properties`, etc.
+   - Multi-module (**module-first strategy**):
+     1. Glob `**/pom.xml` (or `**/build.gradle`) to discover all module directories.
+     2. For each module, glob `<module>/src/**/*.java`, `<module>/src/**/*.properties`, etc. and record counts per module.
+     3. This avoids holding thousands of paths at once — count per module, then sum.
+   - **Sanity check:** if you find multiple `pom.xml` files but total files < 50, you likely missed submodule sources. Re-glob with broader patterns.
+2. **Classify** — determine type by extension: `.java` → Java, `.properties`/`.yml`/`.yaml`/`.xml` → Config, `pom.xml`/`.gradle`/`.kts` → Build. Group counts by module (first path segment after target root).
+3. **Write** — write the scanned log:
+   - **Always:** Header table, Module Structure table, Scope Verification table.
+   - **≤ 100 files:** also write a full Files table with every file listed.
+   - **> 100 files:** omit the Files table. Module counts + glob counts are sufficient.
 
 #### Validation gate
 
@@ -82,24 +80,24 @@ After writing the file:
 1. **Read** `review-scanned-<repo>-<YYYYMMDD>.md`.
 2. **Verify** ALL of:
    - `# Scanned Files` header exists
-   - `## Directory Structure` contains a non-empty tree
-   - `## Files Read` table has ≥ 1 data row
+   - `## Module Structure` table has ≥ 1 data row
+   - `## Scope Verification` table has ≥ 1 glob pattern
+   - Module Structure Total row sum = Header Total Files
 3. If any check fails → regenerate. Do NOT proceed with an empty or placeholder file.
 4. **STOP and present to operator. Wait for confirmation before Pass 2.**
    - Operator may adjust scope (add/remove files) before confirming.
 
 ### Pass 2 — Review
 
-**Gate:** Read `review-scanned-<repo>-<YYYYMMDD>.md`. If it is empty or missing the `## Files Read` table, STOP — go back and complete Pass 1 first. Never proceed with an empty scanned files log.
+**Gate:** Read `review-scanned-<repo>-<YYYYMMDD>.md`. If it is empty or missing the `## Module Structure` table, STOP — go back and complete Pass 1 first. Never proceed with an empty scanned files log.
 
 1. Read the confirmed scanned files log as the manifest.
-2. Execute the pattern registry from `checks.md` (migration) and the review procedure from `springboot_reviewer/SKILL.md` (baseline) on the listed files only.
+2. Execute the pattern registry from `checks.md` (migration) and the review procedure from `springboot_reviewer/SKILL.md` (baseline) within the confirmed scope.
 3. Run the **Completeness Self-Check** from `code_scanner/SKILL.md`:
    - Apply to `checks.md` §1–§8 as the migration pattern registry.
    - Apply to `springboot_reviewer/SKILL.md` code quality categories (§3: error handling, resource management, config validation, logging, security). For each category, record at least one finding or explicit "N/A — reviewed, no issues found."
-4. The report's **Files Scanned** count in the Overview table MUST equal the number of rows in the scanned log's **Files Read** table. If mismatch, reconcile before finalizing.
+4. The report's **Files Scanned** count in the Overview table MUST equal the scanned log's Header **Total Files**. If mismatch, reconcile before finalizing.
 5. Write the review report per task card DoD.
-6. **Update** `review-scanned-<repo>-<YYYYMMDD>.md`: annotate the directory tree with finding IDs (`⚠ C1, W2` etc.).
 
 ## Merge Rules
 - **Every finding MUST include a source tag** — no finding may omit it:
