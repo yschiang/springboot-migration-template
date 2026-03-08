@@ -92,12 +92,19 @@ After writing the file:
 **Gate:** Read `review-scanned-<repo>-<YYYYMMDD>.md`. If it is empty or missing the `## Module Structure` table, STOP — go back and complete Pass 1 first. Never proceed with an empty scanned files log.
 
 1. Read the confirmed scanned files log as the manifest.
-2. Execute the pattern registry from `checks.md` (migration) and the review procedure from `springboot_reviewer/SKILL.md` (baseline) within the confirmed scope.
-3. Run the **Completeness Self-Check** from `code_scanner/SKILL.md`:
+2. **Run migration checks** — for each section in `checks.md` §1–§8:
+   a. **§1–§3 (build/deps):** Read `pom.xml` / `build.gradle`. Check Java version, dependency coordinates, Spring Boot version.
+   b. **§4 (code-level):** Run **every grep pattern** from each table as a separate search against `**/src/**/*.java`. One search call per row.
+   c. **§5 (config):** Run every old-key pattern against config files (`*.properties`, `*.yml`).
+   d. **§6–§8:** Run the relevant searches described in each section.
+   e. Do NOT skip any section. Do NOT rely on memory — run the search tool.
+3. **Run baseline checks** from `springboot_reviewer/SKILL.md` within the confirmed scope.
+4. Run the **Completeness Self-Check** from `code_scanner/SKILL.md`:
    - Apply to `checks.md` §1–§8 as the migration pattern registry.
    - Apply to `springboot_reviewer/SKILL.md` code quality categories (§3: error handling, resource management, config validation, logging, security). For each category, record at least one finding or explicit "N/A — reviewed, no issues found."
-4. The report's **Files Scanned** count in the Overview table MUST equal the scanned log's Header **Total Files**. If mismatch, reconcile before finalizing.
-5. Write the review report per task card DoD.
+   - Complete the **Coverage tracker** (item 6) — all sections must be `[x]` or `[-]`.
+5. The report's **Files Scanned** count in the Overview table MUST equal the scanned log's Header **Total Files**. If mismatch, reconcile before finalizing.
+6. Write the review report per task card DoD.
 
 ## Merge Rules
 - **Every finding MUST include a source tag** — no finding may omit it:

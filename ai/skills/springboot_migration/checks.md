@@ -6,6 +6,15 @@
 - Spring Security upgrade path: Boot 2.7 → Security 5.8 first → Security 6 → Boot 3.
 - Apache HttpClient upgraded: 4.x (`org.apache.http.*`) → 5.x (`org.apache.hc.*`).
 
+## Execution Protocol
+
+Every grep pattern listed in a table below is a **mandatory search**.
+- Run each row as a **separate** built-in search call (one pattern, one file glob).
+- If a pattern returns ≥ 1 match → create a finding (D1).
+- If a pattern returns 0 matches → record "N/A" in the coverage tracker.
+- For checks without grep tables (§1, §2, §3, §7), read the relevant files (build files, config files) and evaluate the conditions described.
+- Do NOT skip a section. Do NOT rely on memory from reading files — run the search.
+
 ## Checks (ordered by ROI)
 
 ### 1) Baseline detection
