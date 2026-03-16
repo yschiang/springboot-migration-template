@@ -486,7 +486,8 @@ def run_pattern_scan(files: list, target: Path) -> tuple:
 
 # ── Directory tree ──────────────────────────────────────────────────────
 
-def build_tree(files: list, target: Path) -> str:
+def build_tree(files: list, target: Path, dirs_only: bool = False) -> str:
+    """Build directory tree. dirs_only=True shows only directories with file counts."""
     tree = {}
     for f in files:
         rel = str(f.relative_to(target)).replace("\\", "/")
@@ -498,28 +499,74 @@ def build_tree(files: list, target: Path) -> str:
 
     lines = []
 
+    def count_files(node):
+        """Count leaf files under a node."""
+        if node is None:
+            return 1
+        return sum(count_files(v) for v in node.values())
+
     def render(node: dict, prefix: str = ""):
-        items = sorted(node.items(), key=lambda x: (x[1] is None, x[0]))
-        for i, (name, children) in enumerate(items):
-            is_last = i == len(items) - 1
-            connector = "\u2514\u2500\u2500 " if is_last else "\u251c\u2500\u2500 "
-            if children is None:
-                lines.append(f"{prefix}{connector}{name}")
-            else:
-                collapsed = name
-                inner = children
-                while isinstance(inner, dict) and len(inner) == 1:
-                    child_name, child_val = next(iter(inner.items()))
-                    if child_val is None:
-                        break
-                    collapsed = f"{collapsed}/{child_name}"
-                    inner = child_val
-                lines.append(f"{prefix}{connector}{collapsed}/")
-                extension = "    " if is_last else "\u2502   "
-                render(inner, prefix + extension)
+        if dirs_only:
+            dirs = sorted([(k, v) for k, v in node.items() if v is not None], key=lambda x: x[0])
+            n_leaf = sum(1 for v in node.values() if v is None)
+
+            # Merge leaf count into the list of items to render
+            items = []
+            for k, v in dirs:
+                items.append((k, v))
+            if n_leaf:
+                items.append((_file_count_label(n_leaf), None))
+
+            for i, (name, children) in enumerate(items):
+                is_last = i == len(items) - 1
+                connector = "\u2514\u2500\u2500 " if is_last else "\u251c\u2500\u2500 "
+                if children is None:
+                    lines.append(f"{prefix}{connector}{name}")
+                else:
+                    # Collapse single-child directory chains
+                    collapsed = name
+                    inner = children
+                    while isinstance(inner, dict) and len(inner) == 1:
+                        child_name, child_val = next(iter(inner.items()))
+                        if child_val is None:
+                            break
+                        collapsed = f"{collapsed}/{child_name}"
+                        inner = child_val
+                    # If this dir only has leaf files (no subdirs), don't recurse
+                    has_subdirs = any(v is not None for v in inner.values()) if isinstance(inner, dict) else False
+                    n = count_files(inner)
+                    if has_subdirs:
+                        lines.append(f"{prefix}{connector}{collapsed}/  ({n} files)")
+                        extension = "    " if is_last else "\u2502   "
+                        render(inner, prefix + extension)
+                    else:
+                        lines.append(f"{prefix}{connector}{collapsed}/  ({n} files)")
+        else:
+            items = sorted(node.items(), key=lambda x: (x[1] is None, x[0]))
+            for i, (name, children) in enumerate(items):
+                is_last = i == len(items) - 1
+                connector = "\u2514\u2500\u2500 " if is_last else "\u251c\u2500\u2500 "
+                if children is None:
+                    lines.append(f"{prefix}{connector}{name}")
+                else:
+                    collapsed = name
+                    inner = children
+                    while isinstance(inner, dict) and len(inner) == 1:
+                        child_name, child_val = next(iter(inner.items()))
+                        if child_val is None:
+                            break
+                        collapsed = f"{collapsed}/{child_name}"
+                        inner = child_val
+                    lines.append(f"{prefix}{connector}{collapsed}/")
+                    extension = "    " if is_last else "\u2502   "
+                    render(inner, prefix + extension)
 
     render(tree)
     return "\n".join(lines)
+
+
+def _file_count_label(n: int) -> str:
+    return f"[{n} files]"
 
 
 # ── Markdown generation ────────────────────────────────────────────────
@@ -602,7 +649,8 @@ def generate_manifest(target: Path) -> str:
     # ── Pattern Scan Results ──
     lines.append("## Pattern Scan Results")
     lines.append("")
-    lines.append("All checks.md patterns executed. Pass 2 agent: create a finding for every row with matches, or record N/A.")
+    lines.append("All checks.md patterns executed with evidence snippets.")
+    lines.append("Pass 2 agent: use these directly — no need to re-search or read matched files unless context is ambiguous.")
     lines.append("")
 
     # Group by section
@@ -616,8 +664,6 @@ def generate_manifest(target: Path) -> str:
 
         lines.append(f"### {section} — {section_names.get(section, section)}")
         lines.append("")
-        lines.append("| Severity | Pattern | Matches | Files |")
-        lines.append("|----------|---------|---------|-------|")
 
         # Also show patterns with 0 matches from the registry
         all_patterns_for_section = []
@@ -626,7 +672,7 @@ def generate_manifest(target: Path) -> str:
                 all_patterns_for_section.append(label)
 
         shown = set()
-        # Patterns with hits
+        # Patterns with hits — summary + evidence
         for label, data in sorted(section_results.items(), key=lambda x: (0 if x[1]["severity"] == "Critical" else 1, x[0])):
             hits = data["hits"]
             severity = data["severity"]
@@ -634,29 +680,25 @@ def generate_manifest(target: Path) -> str:
                 continue
             shown.add(label)
 
-            # Deduplicate by file (show first line per file, then count)
             by_file = defaultdict(list)
-            for rel, line_no, _ in hits:
-                by_file[rel].append(line_no)
-
-            file_refs = []
-            for rel, line_nos in sorted(by_file.items()):
-                lines_str = ",".join(str(n) for n in line_nos[:5])
-                if len(line_nos) > 5:
-                    lines_str += f"... (+{len(line_nos) - 5})"
-                file_refs.append(f"`{rel}:{lines_str}`")
+            for rel, line_no, line_text in hits:
+                by_file[rel].append((line_no, line_text))
 
             match_count = len(hits)
             file_count = len(by_file)
-            files_cell = file_refs[0] if file_count == 1 else f"{file_refs[0]} (+{file_count - 1} files)"
-            lines.append(f"| {severity} | {label} | {match_count} | {files_cell} |")
+
+            lines.append(f"#### [{severity}] {label} — {match_count} matches, {file_count} files")
+            lines.append("")
+            for rel, entries in sorted(by_file.items()):
+                for line_no, line_text in entries:
+                    lines.append(f"- `{rel}:{line_no}` — `{line_text}`")
+            lines.append("")
 
         # Patterns with 0 matches (N/A)
-        for label in all_patterns_for_section:
-            if label not in shown and label not in scan_results:
-                lines.append(f"| — | {label} | 0 | N/A |")
-
-        lines.append("")
+        na_labels = [label for label in all_patterns_for_section if label not in shown and label not in scan_results]
+        if na_labels:
+            lines.append("**N/A (0 matches):** " + ", ".join(na_labels))
+            lines.append("")
 
     # Trailing-slash Warn (missing config + has REST controllers)
     if has_rest_controllers and not has_trailing_slash_config:
@@ -733,9 +775,12 @@ def generate_manifest(target: Path) -> str:
     # ── Directory Tree ──
     lines.append("## Directory Tree")
     lines.append("")
+    use_dirs_only = total > 100
+    if use_dirs_only:
+        lines.append("> Directories only (file count per folder). Use the agent's built-in search to find specific files.")
     lines.append("```")
     lines.append(f"{repo_name}/")
-    lines.append(build_tree(files, target))
+    lines.append(build_tree(files, target, dirs_only=use_dirs_only))
     lines.append("```")
     lines.append("")
 

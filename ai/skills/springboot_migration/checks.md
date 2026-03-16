@@ -8,12 +8,15 @@
 
 ## Execution Protocol
 
-Every grep pattern listed in a table below is a **mandatory search**.
-- Run each row as a **separate** built-in search call (one pattern, one file glob).
-- If a pattern returns ≥ 1 match → create a finding (D1).
-- If a pattern returns 0 matches → record "N/A" in the coverage tracker.
-- For checks without grep tables (§1, §2, §3, §7), read the relevant files (build files, config files) and evaluate the conditions described.
-- Do NOT skip a section. Do NOT rely on memory from reading files — run the search.
+The Pass 1 scan tool (`ai/tools/scan_scope.py`) runs **every** grep pattern from §4/§5/§6/§8 tables and writes results (with file:line) into the scanned manifest's **Pattern Scan Results** section. These results are deterministic and exhaustive — they are the source of truth for pattern detection.
+
+**Pass 2 agent workflow:**
+- For **§4/§5/§6/§8 patterns** (scan-tool-covered): read hits directly from the manifest. Do NOT re-run these searches. Instead, **read 1–2 matched files per finding** to verify context (filter false positives in comments/tests, confirm severity, gather evidence snippets).
+- For **§1, §2, §3, §7** (not pattern-based): read the relevant files (build files, config files) and evaluate the conditions described. The manifest's Build Profile and Technology Signals provide pre-parsed data — cross-check against source files only if insufficient.
+- If a pattern has ≥ 1 match in the manifest → create a finding (D1).
+- If a pattern has 0 matches → record "N/A" in the coverage tracker.
+- Do NOT skip a section.
+- The agent **may run additional searches** beyond the pattern registry if knowledge sources or context suggest uncovered issues.
 
 ## Checks (ordered by ROI)
 

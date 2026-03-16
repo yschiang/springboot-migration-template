@@ -24,6 +24,17 @@
              (reference)     (scripts)   (output format)
 ```
 
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| **Extensible Mini Framework** | Layered architecture (tasks → rules + skills → knowledge / tools / templates). Add new task cards or skills without modifying existing ones. |
+| **Invariant & Predictable** | Deterministic tools replace agent-driven enumeration. Behavioral rules + execution protocol + post-hoc validator limit AI freedom. |
+| **Testable Correctness** | 2-pass scan & review. Coverage tracker verifies all checks ran. Inject known issues into sample repos to validate detection and check for false alarms. |
+| **Scalability** | Tiered manifest (≤100 full table, >100 counts only). Pattern scan in Python handles 2000+ files in ~1 second. |
+| **Portability** | Pure Python tools (stdlib only). No OS-specific commands. Agent-agnostic — works with Cline, Claude Code, or any LLM. |
+| **Explainability** | All output is human-readable markdown. Pattern scan results show what matched, what's N/A. Coverage tracker shows check execution at a glance. |
+
 ## SSOT — What Belongs Where
 
 | Layer | Path | Owns |

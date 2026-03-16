@@ -86,10 +86,9 @@ After writing the file:
    - **Module Structure / Files:** defines the scope for all searches.
 2. **Run migration checks** — for each section in `checks.md` §1–§8:
    a. **§1–§3 (build/deps):** Use Build Profile + Technology Signals from the manifest. Cross-check against `pom.xml` / `build.gradle` only if manifest data is insufficient.
-   b. **§4 (code-level):** Run **every grep pattern** from each table as a separate search against `**/src/**/*.java`. One search call per row. Cross-reference with Technology Signals — if a signal was detected, the grep MUST confirm it.
-   c. **§5 (config):** Run every old-key pattern against config files (`*.properties`, `*.yml`).
-   d. **§6–§8:** Run the relevant searches described in each section.
-   e. Do NOT skip any section. Do NOT rely on memory — run the search tool.
+   b. **§4/§5/§6/§8 (scan-tool-covered patterns):** The manifest's **Pattern Scan Results** already contains all hits with file:line. Do NOT re-run these searches. For each pattern with ≥ 1 match: **read 1–2 matched files** to verify context (not a comment, not a false positive), confirm severity, and gather evidence snippets for the finding. List ALL affected files from the manifest in the finding's Where section.
+   c. **§7 (packaging):** Check the manifest's Build Profile for WAR packaging; if present, read deployment config to verify container compatibility.
+   d. Do NOT skip any section. The agent MAY run additional searches beyond the pattern registry if knowledge sources or context suggest uncovered issues.
 3. **Run baseline checks** from `springboot_reviewer/SKILL.md` within the confirmed scope.
 4. Run the **Completeness Self-Check** from `code_scanner/SKILL.md`:
    - Apply to `checks.md` §1–§8 as the migration pattern registry.
